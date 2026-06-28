@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %}Connexion — BookNest{% endblock %} {%
+block content %}
+<div style="max-width: 450px; margin: 2rem auto">
+  <h1 class="page-title">🔑 Connexion</h1>
+
+  <div class="card">
+    <form method="post">
+      {% csrf_token %} {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }} {% if field.errors %}
+        <div class="form-errors">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+      {% endfor %} {% if form.non_field_errors %}
+      <div class="alert alert-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <button type="submit" class="btn btn-primary" style="width: 100%">
+        🚪 Se connecter
+      </button>
+    </form>
+  </div>
+
+  <p class="text-center mt-1">
+    Pas encore de compte ?
+    <a href="{% url 'accounts:signup' %}">Inscrivez-vous</a>
+  </p>
+</div>
+{% endblock %}

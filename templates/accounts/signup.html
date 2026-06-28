@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %}Inscription — BookNest{% endblock %}
+{% block content %}
+<div style="max-width: 450px; margin: 2rem auto">
+  <h1 class="page-title">✨ Inscription</h1>
+
+  <div class="card">
+    <form method="post">
+      {% csrf_token %} {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }} {% if field.errors %}
+        <div class="form-errors">{{ field.errors }}</div>
+        {% endif %} {% if field.help_text %}
+        <small class="text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-success" style="width: 100%">
+        ✅ Créer mon compte
+      </button>
+    </form>
+  </div>
+
+  <p class="text-center mt-1">
+    Déjà un compte ? <a href="{% url 'accounts:login' %}">Connectez-vous</a>
+  </p>
+</div>
+{% endblock %}

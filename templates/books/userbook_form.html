@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object %}Modifier — {{ object.book.title }}{% else %}Ajouter un livre{% endif %}
+    — BookNest
+{% endblock %}
+
+{% block content %}
+<div style="max-width:700px; margin:2rem auto;">
+    <h1 class="page-title">
+        {% if object %}
+            ✏️ Modifier « {{ object.book.title }} »
+        {% else %}
+            📥 Ajouter un livre à ma bibliothèque
+        {% endif %}
+    </h1>
+
+    <div class="card">
+        <form method="post" {% if not object %}enctype="multipart/form-data"{% endif %}>
+            {% csrf_token %}
+
+            {% if not object %}
+                <!-- Champs pour créer un nouveau Book dans le catalogue -->
+                <h3 class="section-title">📖 Informations du livre</h3>
+
+                <div class="form-group">
+                    <label for="id_title">Titre *</label>
+                    <input type="text" name="title" id="id_title" class="form-control" required value="{{ request.POST.title }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_author">Auteur *</label>
+                    <input type="text" name="author" id="id_author" class="form-control" required value="{{ request.POST.author }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_isbn">ISBN</label>
+                    <input type="text" name="isbn" id="id_isbn" class="form-control" value="{{ request.POST.isbn }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_summary">Résumé</label>
+                    <textarea name="summary" id="id_summary" class="form-control" rows="3">{{ request.POST.summary }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_publication_year">Année de publication</label>
+                    <input type="number" name="publication_year" id="id_publication_year" class="form-control" value="{{ request.POST.publication_year }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_category">Catégorie</label>
+                    <select name="category" id="id_category" class="form-control">
+                        <option value="">---</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if request.POST.category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            <!-- Champs UserBook (toujours présents) -->
+            <h3 class="section-title">📊 Mes informations de lecture</h3>
+
+            <div class="form-group">
+                <label for="id_reading_status">Statut de lecture</label>
+                <select name="reading_status" id="id_reading_status" class="form-control">
+                    <option value="to_read" {% if form.reading_status.value == 'to_read' %}selected{% endif %}>📋 À lire</option>
+                    <option value="reading" {% if form.reading_status.value == 'reading' %}selected{% endif %}>📖 En cours</option>
+                    <option value="finished" {% if form.reading_status.value == 'finished' %}selected{% endif %}>✅ Terminé</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="display:flex; gap:2rem;">
+                <label>
+                    <input type="checkbox" name="is_favorite" {% if form.is_favorite.value %}checked{% endif %}>
+                    ⭐ Favori
+                </label>
+                <label>
+                    <input type="checkbox" name="is_read_later" {% if form.is_read_later.value %}checked{% endif %}>
+                    🔖 À lire plus tard
+                </label>
+            </div>
+
+            {% if object %}
+                <div class="form-group">
+                    <label for="id_personal_note">Note personnelle</label>
+                    <textarea name="personal_note" id="id_personal_note" class="form-control" rows="3">{{ form.personal_note.value|default:'' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_comment">Commentaire (public)</label>
+                    <textarea name="comment" id="id_comment" class="form-control" rows="3">{{ form.comment.value|default:'' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_rating">Évaluation</label>
+                    <select name="rating" id="id_rating" class="form-control">
+                        <option value="">---</option>
+                        <option value="1" {% if form.rating.value == 1 %}selected{% endif %}>★☆☆☆☆</option>
+                        <option value="2" {% if form.rating.value == 2 %}selected{% endif %}>★★☆☆☆</option>
+                        <option value="3" {% if form.rating.value == 3 %}selected{% endif %}>★★★☆☆</option>
+                        <option value="4" {% if form.rating.value == 4 %}selected{% endif %}>★★★★☆</option>
+                        <option value="5" {% if form.rating.value == 5 %}selected{% endif %}>★★★★★</option>
+                    </select>
+                </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
+                <button type="submit" class="btn btn-success">
+                    {% if object %}💾 Enregistrer{% else %}📥 Ajouter à ma bibliothèque{% endif %}
+                </button>
+                <a href="{% url 'my-books' %}" class="btn btn-outline">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

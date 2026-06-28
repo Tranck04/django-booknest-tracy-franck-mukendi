@@ -1,0 +1,167 @@
+{% extends 'base.html' %} {% block title %}Ma Bibliothèque — BookNest{% endblock
+%} {% block content %}
+<div class="flex-between">
+  <h1 class="page-title">📖 Ma Bibliothèque</h1>
+  <a href="{% url 'userbook-create' %}" class="btn btn-success"
+    >📥 Ajouter un livre</a
+  >
+</div>
+
+<!-- Mini stats -->
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-number">{{ total_books }}</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">{{ books_reading }}</div>
+    <div class="stat-label">En cours</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">{{ books_finished }}</div>
+    <div class="stat-label">Terminés</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">⭐ {{ books_favorites }}</div>
+    <div class="stat-label">Favoris</div>
+  </div>
+</div>
+
+<!-- Filtres -->
+<div class="filters">
+  <a
+    href="{% url 'my-books' %}"
+    class="btn btn-sm {% if not request.GET.status and not request.GET.favorite and not request.GET.read_later %}btn-primary{% else %}btn-outline{% endif %}"
+    >Tous</a
+  >
+  <a
+    href="?status=to_read"
+    class="btn btn-sm {% if request.GET.status == 'to_read' %}btn-warning{% else %}btn-outline{% endif %}"
+    >📋 À lire</a
+  >
+  <a
+    href="?status=reading"
+    class="btn btn-sm {% if request.GET.status == 'reading' %}btn-primary{% else %}btn-outline{% endif %}"
+    >📖 En cours</a
+  >
+  <a
+    href="?status=finished"
+    class="btn btn-sm {% if request.GET.status == 'finished' %}btn-success{% else %}btn-outline{% endif %}"
+    >✅ Terminés</a
+  >
+  <a
+    href="?favorite=1"
+    class="btn btn-sm {% if request.GET.favorite %}btn-warning{% else %}btn-outline{% endif %}"
+    >⭐ Favoris</a
+  >
+  <a
+    href="?read_later=1"
+    class="btn btn-sm {% if request.GET.read_later %}btn-outline{% else %}btn-outline{% endif %}"
+    >🔖 À lire plus tard</a
+  >
+</div>
+
+<!-- Grille -->
+<div class="card-grid">
+  {% for user_book in user_books %}
+  <div class="card">
+    {% if user_book.book.cover_image %}
+    <img
+      src="{{ user_book.book.cover_image.url }}"
+      alt="{{ user_book.book.title }}"
+      style="
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+      "
+    />
+    {% else %}
+    <div
+      class="detail-cover-placeholder"
+      style="height: 100px; font-size: 2rem"
+    >
+      📖
+    </div>
+    {% endif %}
+
+    <h3 class="book-title">
+      <a href="{% url 'book-detail' user_book.book.pk %}"
+        >{{ user_book.book.title }}</a
+      >
+    </h3>
+    <p class="book-author">{{ user_book.book.author }}</p>
+
+    <div
+      style="
+        margin-top: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      "
+    >
+      {% if user_book.reading_status == 'to_read' %}
+      <span class="badge badge-to-read">📋 À lire</span>
+      {% elif user_book.reading_status == 'reading' %}
+      <span class="badge badge-reading">📖 En cours</span>
+      {% elif user_book.reading_status == 'finished' %}
+      <span class="badge badge-finished">✅ Terminé</span>
+      {% endif %} {% if user_book.is_favorite %}
+      <span title="Favori">⭐</span>
+      {% endif %} {% if user_book.is_read_later %}
+      <span title="À lire plus tard">🔖</span>
+      {% endif %} {% if user_book.rating %}
+      <span>{{ user_book.get_rating_display }}</span>
+      {% endif %}
+    </div>
+
+    <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem">
+      <a
+        href="{% url 'userbook-update' user_book.pk %}"
+        class="btn btn-outline btn-sm"
+        >✏️ Modifier</a
+      >
+      <a
+        href="{% url 'userbook-delete' user_book.pk %}"
+        class="btn btn-danger btn-sm"
+        >🗑️ Retirer</a
+      >
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state" style="grid-column: 1/-1">
+    <div class="empty-icon">📭</div>
+    <p>Votre bibliothèque est vide.</p>
+    <a href="{% url 'userbook-create' %}" class="btn btn-success mt-1"
+      >📥 Ajouter votre premier livre</a
+    >
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="text-center mt-2">
+  <div class="filters" style="justify-content: center">
+    {% if page_obj.has_previous %}
+    <a
+      href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+      class="btn btn-outline btn-sm"
+      >← Précédent</a
+    >
+    {% endif %}
+    <span class="text-muted"
+      >Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span
+    >
+    {% if page_obj.has_next %}
+    <a
+      href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+      class="btn btn-outline btn-sm"
+      >Suivant →</a
+    >
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endblock %}
