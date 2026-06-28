@@ -2,7 +2,6 @@
 block content %}
 <h1 class="page-title">📖 Catalogue</h1>
 
-<!-- Filtres -->
 <div class="filters">
   <select
     id="category-filter"
@@ -53,7 +52,6 @@ block content %}
   }} trouvé{{ total|pluralize }} {% endwith %}
 </p>
 
-<!-- Grille de livres -->
 <div class="card-grid">
   {% for book in books %}
   <div class="card">
@@ -102,7 +100,6 @@ block content %}
   {% endfor %}
 </div>
 
-<!-- Pagination -->
 {% if is_paginated %}
 <div class="text-center mt-2">
   <div class="filters" style="justify-content: center">

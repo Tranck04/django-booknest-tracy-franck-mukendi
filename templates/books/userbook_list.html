@@ -7,7 +7,6 @@
   >
 </div>
 
-<!-- Mini stats -->
 <div class="stats-row">
   <div class="stat-box">
     <div class="stat-number">{{ total_books }}</div>
@@ -27,7 +26,6 @@
   </div>
 </div>
 
-<!-- Filtres -->
 <div class="filters">
   <a
     href="{% url 'my-books' %}"
@@ -61,7 +59,6 @@
   >
 </div>
 
-<!-- Grille -->
 <div class="card-grid">
   {% for user_book in user_books %}
   <div class="card">
@@ -141,7 +138,6 @@
   {% endfor %}
 </div>
 
-<!-- Pagination -->
 {% if is_paginated %}
 <div class="text-center mt-2">
   <div class="filters" style="justify-content: center">
