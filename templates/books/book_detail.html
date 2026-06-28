@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% block title %}{{ book.title }} — BookNest{%
+endblock %} {% block content %}
+<div class="detail-grid">
+  <!-- Couverture -->
+  <div>
+    {% if book.cover_image %}
+    <img
+      src="{{ book.cover_image.url }}"
+      alt="{{ book.title }}"
+      class="detail-cover"
+    />
+    {% else %}
+    <div class="detail-cover-placeholder">📖</div>
+    {% endif %}
+  </div>
+
+  <!-- Informations -->
+  <div>
+    <h1 class="page-title" style="margin-bottom: 0.25rem">{{ book.title }}</h1>
+    <p style="font-size: 1.2rem; color: var(--color-text-light)">
+      par <strong>{{ book.author }}</strong>
+    </p>
+
+    <div class="detail-meta">
+      {% if book.publication_year %}
+      <span>📅 {{ book.publication_year }}</span>
+      {% endif %} {% if book.isbn %}
+      <span>🔢 ISBN : {{ book.isbn }}</span>
+      {% endif %} {% if book.category %}
+      <span class="badge badge-reading">{{ book.category.name }}</span>
+      {% endif %}
+    </div>
+
+    {% if book.summary %}
+    <div class="card" style="margin-top: 1rem">
+      <h3 class="section-title">📝 Résumé</h3>
+      <p>{{ book.summary|linebreaksbr }}</p>
+    </div>
+    {% endif %}
+
+    <p class="text-muted" style="font-size: 0.85rem; margin-top: 1rem">
+      Ajouté au catalogue le {{ book.added_to_catalog|date:"d/m/Y" }}
+    </p>
+
+    <!-- Actions utilisateur -->
+    <div
+      style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap"
+    >
+      {% if user.is_authenticated %} {% if user_book %}
+      <span class="badge badge-finished">✅ Dans ma bibliothèque</span>
+      <a
+        href="{% url 'userbook-update' user_book.pk %}"
+        class="btn btn-outline btn-sm"
+        >✏️ Modifier</a
+      >
+      {% else %}
+      <a href="{% url 'userbook-create' %}" class="btn btn-success"
+        >📥 Ajouter à ma bibliothèque</a
+      >
+      {% endif %} {% else %}
+      <a href="{% url 'login' %}" class="btn btn-primary"
+        >🔑 Connectez-vous pour ajouter ce livre</a
+      >
+      {% endif %}
+      <a href="{% url 'catalogue' %}" class="btn btn-outline btn-sm"
+        >← Retour au catalogue</a
+      >
+    </div>
+  </div>
+</div>
+
+<!-- Avis de la communauté -->
+{% if reviews %}
+<div class="mt-2">
+  <h2 class="section-title">💬 Avis de la communauté</h2>
+  {% for review in reviews %}
+  <div class="card">
+    <div class="flex-between">
+      <strong>{{ review.user.username }}</strong>
+      {% if review.rating %}
+      <span>{{ review.get_rating_display }}</span>
+      {% endif %}
+    </div>
+    <p style="margin-top: 0.5rem">{{ review.comment|linebreaksbr }}</p>
+    <p class="text-muted" style="font-size: 0.8rem">
+      {{ review.updated_at|date:"d/m/Y" }}
+    </p>
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% endblock %}

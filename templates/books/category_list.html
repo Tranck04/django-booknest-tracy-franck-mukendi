@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block title %}Catégories — BookNest{% endblock %}
+{% block content %}
+<h1 class="page-title">📂 Catégories</h1>
+
+<div class="card-grid">
+  {% for category in categories %}
+  <div class="card">
+    <h3 class="book-title">
+      <a href="{% url 'catalogue' %}?category={{ category.id }}"
+        >{{ category.name }}</a
+      >
+    </h3>
+    {% if category.description %}
+    <p class="text-muted" style="margin-top: 0.5rem">
+      {{ category.description }}
+    </p>
+    {% endif %}
+    <p style="margin-top: 0.75rem">
+      <span class="badge badge-reading"
+        >{{ category.book_count }} livre{{ category.book_count|pluralize
+        }}</span
+      >
+    </p>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div class="empty-icon">📂</div>
+    <p>Aucune catégorie pour le moment.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html' %} {% block title %}Catalogue — BookNest{% endblock %} {%
+block content %}
+<h1 class="page-title">📖 Catalogue</h1>
+
+<!-- Filtres -->
+<div class="filters">
+  <select
+    id="category-filter"
+    onchange="window.location.href='?category='+this.value{% if search_query %}+'&q={{ search_query }}'{% endif %};"
+  >
+    <option value="">Toutes les catégories</option>
+    {% for cat in categories %}
+    <option
+      value="{{ cat.id }}"
+      {%
+      if
+      current_category=""
+      ="cat.id"
+      %}selected{%
+      endif
+      %}
+    >
+      {{ cat.name }} ({{ cat.book_count }})
+    </option>
+    {% endfor %}
+  </select>
+  <form
+    method="get"
+    action="{% url 'catalogue' %}"
+    style="display: flex; gap: 0.5rem; flex: 1"
+  >
+    {% if current_category %}
+    <input type="hidden" name="category" value="{{ current_category }}" />
+    {% endif %}
+    <input
+      type="text"
+      name="q"
+      value="{{ search_query }}"
+      placeholder="Rechercher un titre ou un auteur..."
+      style="flex: 1"
+    />
+    <button type="submit" class="btn btn-primary btn-sm">🔍 Rechercher</button>
+    {% if search_query or current_category %}
+    <a href="{% url 'catalogue' %}" class="btn btn-outline btn-sm"
+      >✕ Réinitialiser</a
+    >
+    {% endif %}
+  </form>
+</div>
+
+<p class="text-muted mb-1">
+  {% with total=page_obj.paginator.count %} {{ total }} livre{{ total|pluralize
+  }} trouvé{{ total|pluralize }} {% endwith %}
+</p>
+
+<!-- Grille de livres -->
+<div class="card-grid">
+  {% for book in books %}
+  <div class="card">
+    {% if book.cover_image %}
+    <img
+      src="{{ book.cover_image.url }}"
+      alt="{{ book.title }}"
+      style="
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+      "
+    />
+    {% else %}
+    <div
+      class="detail-cover-placeholder"
+      style="height: 120px; font-size: 2.5rem"
+    >
+      📖
+    </div>
+    {% endif %}
+    <h3 class="book-title">
+      <a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a>
+    </h3>
+    <p class="book-author">{{ book.author }}</p>
+    {% if book.publication_year %}
+    <p class="text-muted" style="font-size: 0.85rem">
+      {{ book.publication_year }}
+    </p>
+    {% endif %} {% if book.category %}
+    <span class="badge badge-reading">{{ book.category.name }}</span>
+    {% endif %}
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <p>Aucun livre trouvé.</p>
+    {% if search_query or current_category %}
+    <a href="{% url 'catalogue' %}" class="btn btn-outline mt-1"
+      >Voir tout le catalogue</a
+    >
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="text-center mt-2">
+  <div class="filters" style="justify-content: center">
+    {% if page_obj.has_previous %}
+    <a
+      href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+      class="btn btn-outline btn-sm"
+      >← Précédent</a
+    >
+    {% endif %}
+    <span class="text-muted"
+      >Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span
+    >
+    {% if page_obj.has_next %}
+    <a
+      href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+      class="btn btn-outline btn-sm"
+      >Suivant →</a
+    >
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endblock %}
