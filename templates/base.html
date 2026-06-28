@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}BookNest{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container nav-container">
+        <a href="{% url 'home' %}" class="nav-brand">📚 BookNest</a>
+        <ul class="nav-links">
+          <li><a href="{% url 'home' %}">Accueil</a></li>
+          <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+          <li><a href="{% url 'category-list' %}">Catégories</a></li>
+          <li><a href="{% url 'about' %}">À propos</a></li>
+
+          {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'my-books' %}" class="nav-highlight"
+              >📖 Ma Bibliothèque</a
+            >
+          </li>
+          <li>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+              {% csrf_token %}
+              <button type="submit" class="btn-link">🚪 Déconnexion</button>
+            </form>
+          </li>
+          <li class="nav-user">👤 {{ user.username }}</li>
+          {% else %}
+          <li><a href="{% url 'login' %}">🔑 Connexion</a></li>
+          <li>
+            <a href="{% url 'signup' %}" class="nav-highlight"
+              >✨ Inscription</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages container">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <main class="container main-content">
+      {% block content %} {% endblock %}
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="footer">
+      <div class="container">
+        <p>
+          &copy; 2025 BookNest — Bibliothèque personnelle en ligne | Projet
+          Django
+        </p>
+      </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>
