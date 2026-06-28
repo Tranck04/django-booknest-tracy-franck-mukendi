@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from .models import Category, Book, UserBook
@@ -76,6 +76,10 @@ class BookDetailView(DetailView):
         context['reviews'] = UserBook.objects.filter(
             book=self.object
         ).exclude(comment='').select_related('user').order_by('-updated_at')[:10]
+        # Note moyenne (Phase 11.4)
+        ratings = UserBook.objects.filter(book=self.object).exclude(rating__isnull=True)
+        context['avg_rating'] = ratings.aggregate(avg=Avg('rating'))['avg']
+        context['rating_count'] = ratings.count()
         return context
 
 
@@ -158,6 +162,7 @@ class UserBookCreateView(LoginRequiredMixin, CreateView):
                 summary=self.request.POST.get('summary', ''),
                 publication_year=self.request.POST.get('publication_year') or None,
                 category_id=self.request.POST.get('category') or None,
+                cover_image=self.request.FILES.get('cover_image'),
             )
             messages.success(self.request, f"📚 '{book.title}' a été ajouté au catalogue !")
         else:
@@ -209,3 +214,104 @@ class UserBookDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         messages.success(self.request, "🗑️ Livre retiré de votre bibliothèque.")
         return reverse_lazy('my-books')
+
+
+# ============================================================
+# Phase 11 - Pour aller plus loin
+# ============================================================
+
+class UserBookFavoriteListView(LoginRequiredMixin, ListView):
+    """Mes Favoris."""
+    model = UserBook
+    template_name = 'books/userbook_list.html'
+    context_object_name = 'user_books'
+    paginate_by = 12
+
+    def get_queryset(self):
+        return UserBook.objects.filter(
+            user=self.request.user,
+            is_favorite=True
+        ).select_related('book', 'book__category').order_by('-added_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_qs = UserBook.objects.filter(user=self.request.user)
+        context['total_books'] = user_qs.filter(is_favorite=True).count()
+        context['books_reading'] = user_qs.filter(is_favorite=True, reading_status='reading').count()
+        context['books_finished'] = user_qs.filter(is_favorite=True, reading_status='finished').count()
+        context['books_favorites'] = user_qs.filter(is_favorite=True).count()
+        context['page_title'] = '⭐ Mes Favoris'
+        return context
+
+
+class UserBookReadLaterListView(LoginRequiredMixin, ListView):
+    """Ma liste « À lire plus tard »."""
+    model = UserBook
+    template_name = 'books/userbook_list.html'
+    context_object_name = 'user_books'
+    paginate_by = 12
+
+    def get_queryset(self):
+        return UserBook.objects.filter(
+            user=self.request.user,
+            is_read_later=True
+        ).select_related('book', 'book__category').order_by('-added_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_qs = UserBook.objects.filter(user=self.request.user)
+        context['total_books'] = user_qs.filter(is_read_later=True).count()
+        context['books_reading'] = user_qs.filter(is_read_later=True, reading_status='reading').count()
+        context['books_finished'] = user_qs.filter(is_read_later=True, reading_status='finished').count()
+        context['books_favorites'] = user_qs.filter(is_favorite=True, is_read_later=True).count()
+        context['page_title'] = '🔖 À lire plus tard'
+        return context
+
+
+class ReadingStatsView(LoginRequiredMixin, TemplateView):
+    """Statistiques de lecture personnelles."""
+    template_name = 'books/reading_stats.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        qs = UserBook.objects.filter(user=user)
+
+        total = qs.count()
+
+        # Par statut
+        to_read = qs.filter(reading_status='to_read').count()
+        reading = qs.filter(reading_status='reading').count()
+        finished = qs.filter(reading_status='finished').count()
+
+        context['total'] = total
+        context['to_read'] = to_read
+        context['reading'] = reading
+        context['finished'] = finished
+        context['to_read_pct'] = round(to_read / total * 100) if total > 0 else 0
+        context['reading_pct'] = round(reading / total * 100) if total > 0 else 0
+        context['finished_pct'] = round(finished / total * 100) if total > 0 else 0
+
+        # Par catégorie
+        context['by_category'] = (
+            qs.values('book__category__name')
+            .annotate(count=Count('id'))
+            .order_by('-count')
+        )
+
+        # Notes
+        rated = qs.exclude(rating__isnull=True)
+        context['avg_rating'] = rated.aggregate(avg=models.Avg('rating'))['avg']
+        context['rated_count'] = rated.count()
+
+        # Favoris
+        context['favorites'] = qs.filter(is_favorite=True).count()
+
+        # Top livres
+        context['best_rated'] = rated.order_by('-rating', '-updated_at')[:3]
+        context['recently_added'] = qs.order_by('-added_date')[:5]
+
+        # Taux de complétion
+        context['completion_rate'] = round(finished / total * 100) if total > 0 else 0
+
+        return context

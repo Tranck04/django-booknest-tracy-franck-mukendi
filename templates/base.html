@@ -25,6 +25,9 @@
               >📖 Ma Bibliothèque</a
             >
           </li>
+          <li><a href="{% url 'my-favorites' %}">⭐ Favoris</a></li>
+          <li><a href="{% url 'my-read-later' %}">🔖 À lire plus tard</a></li>
+          <li><a href="{% url 'reading-stats' %}">📊 Stats</a></li>
           <li>
             <form method="post" action="{% url 'logout' %}" class="logout-form">
               {% csrf_token %}

@@ -31,7 +31,12 @@ endblock %} {% block content %}
       {% endif %}
     </div>
 
-    {% if book.summary %}
+    {% if avg_rating %}
+    <p style="margin-top: 0.5rem">
+      ⭐ Note moyenne : <strong>{{ avg_rating|floatformat:1 }} / 5</strong>
+      ({{ rating_count }} avis)
+    </p>
+    {% endif %} {% if book.summary %}
     <div class="card" style="margin-top: 1rem">
       <h3 class="section-title">📝 Résumé</h3>
       <p>{{ book.summary|linebreaksbr }}</p>

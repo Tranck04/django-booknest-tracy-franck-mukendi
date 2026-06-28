@@ -16,4 +16,9 @@ urlpatterns = [
     path('my-books/add/', views.UserBookCreateView.as_view(), name='userbook-create'),
     path('my-books/<int:pk>/edit/', views.UserBookUpdateView.as_view(), name='userbook-update'),
     path('my-books/<int:pk>/delete/', views.UserBookDeleteView.as_view(), name='userbook-delete'),
+
+    # Phase 11 - Pour aller plus loin
+    path('my-books/favorites/', views.UserBookFavoriteListView.as_view(), name='my-favorites'),
+    path('my-books/read-later/', views.UserBookReadLaterListView.as_view(), name='my-read-later'),
+    path('my-books/stats/', views.ReadingStatsView.as_view(), name='reading-stats'),
 ]

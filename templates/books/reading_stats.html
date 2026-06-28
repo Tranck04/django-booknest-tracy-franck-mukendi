@@ -1,0 +1,168 @@
+{% extends 'base.html' %} {% block title %}Statistiques — BookNest{% endblock %}
+{% block content %}
+<h1 class="page-title">📊 Statistiques de lecture</h1>
+
+<!-- Résumé -->
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-number">{{ total }}</div>
+    <div class="stat-label">Livres dans ma bibliothèque</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">{{ favorites }}</div>
+    <div class="stat-label">⭐ Favoris</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">{{ completion_rate }}%</div>
+    <div class="stat-label">Taux de complétion</div>
+  </div>
+  {% if avg_rating %}
+  <div class="stat-box">
+    <div class="stat-number">{{ avg_rating|floatformat:1 }}</div>
+    <div class="stat-label">Note moyenne ({{ rated_count }} avis)</div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Répartition par statut -->
+<div class="card">
+  <h2 class="section-title">📋 Par statut de lecture</h2>
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-number">{{ to_read }}</div>
+      <div class="stat-label">📋 À lire ({{ to_read_pct }}%)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">{{ reading }}</div>
+      <div class="stat-label">📖 En cours ({{ reading_pct }}%)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">{{ finished }}</div>
+      <div class="stat-label">✅ Terminés ({{ finished_pct }}%)</div>
+    </div>
+  </div>
+  <!-- Barres de progression -->
+  <div style="margin-top: 1rem">
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        gap: 0.5rem;
+      "
+    >
+      <span style="width: 80px; font-size: 0.85rem">📋 À lire</span>
+      <div
+        style="
+          flex: 1;
+          background: var(--color-border);
+          border-radius: 100px;
+          height: 20px;
+        "
+      >
+        <div
+          style="width:{{ to_read_pct }}%; background:#f39c12; height:100%; border-radius:100px;"
+        ></div>
+      </div>
+      <span style="width: 40px; font-size: 0.85rem">{{ to_read_pct }}%</span>
+    </div>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        gap: 0.5rem;
+      "
+    >
+      <span style="width: 80px; font-size: 0.85rem">📖 En cours</span>
+      <div
+        style="
+          flex: 1;
+          background: var(--color-border);
+          border-radius: 100px;
+          height: 20px;
+        "
+      >
+        <div
+          style="width:{{ reading_pct }}%; background:#3498db; height:100%; border-radius:100px;"
+        ></div>
+      </div>
+      <span style="width: 40px; font-size: 0.85rem">{{ reading_pct }}%</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem">
+      <span style="width: 80px; font-size: 0.85rem">✅ Terminés</span>
+      <div
+        style="
+          flex: 1;
+          background: var(--color-border);
+          border-radius: 100px;
+          height: 20px;
+        "
+      >
+        <div
+          style="width:{{ finished_pct }}%; background:#27ae60; height:100%; border-radius:100px;"
+        ></div>
+      </div>
+      <span style="width: 40px; font-size: 0.85rem">{{ finished_pct }}%</span>
+    </div>
+  </div>
+</div>
+
+<!-- Répartition par catégorie -->
+{% if by_category %}
+<div class="card">
+  <h2 class="section-title">📂 Par catégorie</h2>
+  <table style="width: 100%; border-collapse: collapse">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--color-border)">
+        <th style="text-align: left; padding: 0.5rem">Catégorie</th>
+        <th style="text-align: right; padding: 0.5rem">Nombre</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in by_category %}
+      <tr style="border-bottom: 1px solid var(--color-border)">
+        <td style="padding: 0.5rem">
+          {{ item.book__category__name|default:"Sans catégorie" }}
+        </td>
+        <td style="text-align: right; padding: 0.5rem">{{ item.count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<!-- Top livres -->
+{% if best_rated %}
+<div class="card">
+  <h2 class="section-title">🏆 Mes livres les mieux notés</h2>
+  {% for ub in best_rated %}
+  <p>
+    {{ ub.get_rating_display }}
+    <a href="{% url 'book-detail' ub.book.pk %}">{{ ub.book.title }}</a>
+    — {{ ub.book.author }}
+  </p>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Derniers ajouts -->
+{% if recently_added %}
+<div class="card">
+  <h2 class="section-title">🆕 Derniers ajouts</h2>
+  {% for ub in recently_added %}
+  <p>
+    <a href="{% url 'book-detail' ub.book.pk %}">{{ ub.book.title }}</a>
+    — ajouté le {{ ub.added_date|date:"d/m/Y" }}
+  </p>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="text-center mt-2">
+  <a href="{% url 'my-books' %}" class="btn btn-outline"
+    >← Retour à ma bibliothèque</a
+  >
+</div>
+{% endblock %}

@@ -748,6 +748,8 @@ flowchart TD
 
 ## Diagramme de Gantt simplifié
 
+> **Note :** La Phase 11 (Pour aller plus loin) est réalisée AVANT la Phase 8 (Tests) afin que les tests couvrent également les améliorations.
+
 ```mermaid
 gantt
     title Deroulement du projet BookNest
@@ -761,11 +763,12 @@ gantt
     Pages publiques                 :p4, after p3, 2d
     Authentification                :p5, after p4, 2d
     Bibliotheque perso + anti-doublon :p6, after p5, 3d
-    Tests automatises               :p7, after p6, 2d
-    section Livrables
-    README + verifications          :p8, after p7, 1d
-    Redaction du rapport            :p9, after p7, 3d
     section Pour aller plus loin
-    Images couverture + rech avancee :p10, after p9, 2d
-    Favoris + Avis + Stats          :p11, after p10, 2d
+    Images couverture + rech avancee :p7, after p6, 1d
+    Favoris + Avis + Stats          :p8, after p7, 2d
+    section Tests
+    Tests automatises (couvrant tout) :p9, after p8, 2d
+    section Livrables
+    README + verifications          :p10, after p9, 1d
+    Redaction du rapport            :p11, after p9, 3d
 ```
