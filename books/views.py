@@ -164,9 +164,9 @@ class UserBookCreateView(LoginRequiredMixin, CreateView):
                 category_id=self.request.POST.get('category') or None,
                 cover_image=self.request.FILES.get('cover_image'),
             )
-            messages.success(self.request, f"📚 '{book.title}' a été ajouté au catalogue !")
+            messages.success(self.request, f"'{book.title}' a été ajouté au catalogue.")
         else:
-            messages.info(self.request, f"📖 '{book.title}' existe déjà dans le catalogue. Ajouté à votre bibliothèque.")
+            messages.info(self.request, f"'{book.title}' existe déjà dans le catalogue. Ajouté à votre bibliothèque.")
 
         # Vérifier que l'utilisateur n'a pas déjà ce livre
         if UserBook.objects.filter(user=self.request.user, book=book).exists():
@@ -176,7 +176,7 @@ class UserBookCreateView(LoginRequiredMixin, CreateView):
         # Créer le UserBook
         form.instance.user = self.request.user
         form.instance.book = book
-        messages.success(self.request, f"✅ '{book.title}' ajouté à votre bibliothèque !")
+        messages.success(self.request, f"'{book.title}' ajouté à votre bibliothèque.")
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -198,7 +198,7 @@ class UserBookUpdateView(LoginRequiredMixin, UpdateView):
         return UserBook.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        messages.success(self.request, "✅ Vos informations ont été mises à jour.")
+        messages.success(self.request, "Vos informations ont été mises à jour.")
         return reverse_lazy('my-books')
 
 
@@ -212,7 +212,7 @@ class UserBookDeleteView(LoginRequiredMixin, DeleteView):
         return UserBook.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        messages.success(self.request, "🗑️ Livre retiré de votre bibliothèque.")
+        messages.success(self.request, "Livre retiré de votre bibliothèque.")
         return reverse_lazy('my-books')
 
 
@@ -301,7 +301,7 @@ class ReadingStatsView(LoginRequiredMixin, TemplateView):
 
         # Notes
         rated = qs.exclude(rating__isnull=True)
-        context['avg_rating'] = rated.aggregate(avg=models.Avg('rating'))['avg']
+        context['avg_rating'] = rated.aggregate(avg=Avg('rating'))['avg']
         context['rated_count'] = rated.count()
 
         # Favoris

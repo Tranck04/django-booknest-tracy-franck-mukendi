@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block title %}Ma Bibliothèque — BookNest{% endblock
 %} {% block content %}
 <div class="flex-between">
-  <h1 class="page-title">{{ page_title|default:"📖 Ma Bibliothèque" }}</h1>
+  <h1 class="page-title">{{ page_title|default:"Ma Bibliothèque" }}</h1>
   <a href="{% url 'userbook-create' %}" class="btn btn-success"
-    >📥 Ajouter un livre</a
+    >Ajouter un livre</a
   >
 </div>
 
@@ -21,7 +21,7 @@
     <div class="stat-label">Terminés</div>
   </div>
   <div class="stat-box">
-    <div class="stat-number">⭐ {{ books_favorites }}</div>
+    <div class="stat-number">{{ books_favorites }}</div>
     <div class="stat-label">Favoris</div>
   </div>
 </div>
@@ -35,27 +35,27 @@
   <a
     href="?status=to_read"
     class="btn btn-sm {% if request.GET.status == 'to_read' %}btn-warning{% else %}btn-outline{% endif %}"
-    >📋 À lire</a
+    >À lire</a
   >
   <a
     href="?status=reading"
     class="btn btn-sm {% if request.GET.status == 'reading' %}btn-primary{% else %}btn-outline{% endif %}"
-    >📖 En cours</a
+    >En cours</a
   >
   <a
     href="?status=finished"
     class="btn btn-sm {% if request.GET.status == 'finished' %}btn-success{% else %}btn-outline{% endif %}"
-    >✅ Terminés</a
+    >Terminés</a
   >
   <a
     href="?favorite=1"
     class="btn btn-sm {% if request.GET.favorite %}btn-warning{% else %}btn-outline{% endif %}"
-    >⭐ Favoris</a
+    >Favoris</a
   >
   <a
     href="?read_later=1"
     class="btn btn-sm {% if request.GET.read_later %}btn-outline{% else %}btn-outline{% endif %}"
-    >🔖 À lire plus tard</a
+    >À lire plus tard</a
   >
 </div>
 
@@ -77,9 +77,15 @@
     {% else %}
     <div
       class="detail-cover-placeholder"
-      style="height: 100px; font-size: 2rem"
+      style="
+        height: 100px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
     >
-      📖
+      Sans couverture
     </div>
     {% endif %}
 
@@ -100,15 +106,15 @@
       "
     >
       {% if user_book.reading_status == 'to_read' %}
-      <span class="badge badge-to-read">📋 À lire</span>
+      <span class="badge badge-to-read">À lire</span>
       {% elif user_book.reading_status == 'reading' %}
-      <span class="badge badge-reading">📖 En cours</span>
+      <span class="badge badge-reading">En cours</span>
       {% elif user_book.reading_status == 'finished' %}
-      <span class="badge badge-finished">✅ Terminé</span>
+      <span class="badge badge-finished">Terminé</span>
       {% endif %} {% if user_book.is_favorite %}
-      <span title="Favori">⭐</span>
+      <span title="Favori">★</span>
       {% endif %} {% if user_book.is_read_later %}
-      <span title="À lire plus tard">🔖</span>
+      <span title="À lire plus tard">+</span>
       {% endif %} {% if user_book.rating %}
       <span>{{ user_book.get_rating_display }}</span>
       {% endif %}
@@ -118,21 +124,20 @@
       <a
         href="{% url 'userbook-update' user_book.pk %}"
         class="btn btn-outline btn-sm"
-        >✏️ Modifier</a
+        >Modifier</a
       >
       <a
         href="{% url 'userbook-delete' user_book.pk %}"
         class="btn btn-danger btn-sm"
-        >🗑️ Retirer</a
+        >Retirer</a
       >
     </div>
   </div>
   {% empty %}
   <div class="empty-state" style="grid-column: 1/-1">
-    <div class="empty-icon">📭</div>
     <p>Votre bibliothèque est vide.</p>
     <a href="{% url 'userbook-create' %}" class="btn btn-success mt-1"
-      >📥 Ajouter votre premier livre</a
+      >Ajouter votre premier livre</a
     >
   </div>
   {% endfor %}
@@ -145,7 +150,7 @@
     <a
       href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
       class="btn btn-outline btn-sm"
-      >← Précédent</a
+      >Précédent</a
     >
     {% endif %}
     <span class="text-muted"
@@ -155,7 +160,7 @@
     <a
       href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
       class="btn btn-outline btn-sm"
-      >Suivant →</a
+      >Suivant</a
     >
     {% endif %}
   </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %}Catégories — BookNest{% endblock %}
 {% block content %}
-<h1 class="page-title">📂 Catégories</h1>
+<h1 class="page-title">Catégories</h1>
 
 <div class="card-grid">
   {% for category in categories %}
@@ -24,7 +24,6 @@
   </div>
   {% empty %}
   <div class="empty-state">
-    <div class="empty-icon">📂</div>
     <p>Aucune catégorie pour le moment.</p>
   </div>
   {% endfor %}

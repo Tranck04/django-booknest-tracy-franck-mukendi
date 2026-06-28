@@ -9,7 +9,7 @@ endblock %} {% block content %}
       class="detail-cover"
     />
     {% else %}
-    <div class="detail-cover-placeholder">📖</div>
+    <div class="detail-cover-placeholder">Pas de couverture</div>
     {% endif %}
   </div>
 
@@ -21,9 +21,9 @@ endblock %} {% block content %}
 
     <div class="detail-meta">
       {% if book.publication_year %}
-      <span>📅 {{ book.publication_year }}</span>
+      <span>Année : {{ book.publication_year }}</span>
       {% endif %} {% if book.isbn %}
-      <span>🔢 ISBN : {{ book.isbn }}</span>
+      <span>ISBN : {{ book.isbn }}</span>
       {% endif %} {% if book.category %}
       <span class="badge badge-reading">{{ book.category.name }}</span>
       {% endif %}
@@ -31,12 +31,12 @@ endblock %} {% block content %}
 
     {% if avg_rating %}
     <p style="margin-top: 0.5rem">
-      ⭐ Note moyenne : <strong>{{ avg_rating|floatformat:1 }} / 5</strong>
+      Note moyenne : <strong>{{ avg_rating|floatformat:1 }} / 5</strong>
       ({{ rating_count }} avis)
     </p>
     {% endif %} {% if book.summary %}
     <div class="card" style="margin-top: 1rem">
-      <h3 class="section-title">📝 Résumé</h3>
+      <h3 class="section-title">Résumé</h3>
       <p>{{ book.summary|linebreaksbr }}</p>
     </div>
     {% endif %}
@@ -49,23 +49,23 @@ endblock %} {% block content %}
       style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap"
     >
       {% if user.is_authenticated %} {% if user_book %}
-      <span class="badge badge-finished">✅ Dans ma bibliothèque</span>
+      <span class="badge badge-finished">Dans ma bibliothèque</span>
       <a
         href="{% url 'userbook-update' user_book.pk %}"
         class="btn btn-outline btn-sm"
-        >✏️ Modifier</a
+        >Modifier</a
       >
       {% else %}
       <a href="{% url 'userbook-create' %}" class="btn btn-success"
-        >📥 Ajouter à ma bibliothèque</a
+        >Ajouter à ma bibliothèque</a
       >
       {% endif %} {% else %}
       <a href="{% url 'login' %}" class="btn btn-primary"
-        >🔑 Connectez-vous pour ajouter ce livre</a
+        >Connectez-vous pour ajouter ce livre</a
       >
       {% endif %}
       <a href="{% url 'catalogue' %}" class="btn btn-outline btn-sm"
-        >← Retour au catalogue</a
+        >Retour au catalogue</a
       >
     </div>
   </div>
@@ -73,7 +73,7 @@ endblock %} {% block content %}
 
 {% if reviews %}
 <div class="mt-2">
-  <h2 class="section-title">💬 Avis de la communauté</h2>
+  <h2 class="section-title">Avis de la communauté</h2>
   {% for review in reviews %}
   <div class="card">
     <div class="flex-between">

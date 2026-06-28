@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %}Retirer — {{ user_book.book.title }}
 — BookNest{% endblock %} {% block content %}
 <div style="max-width: 500px; margin: 2rem auto">
-  <h1 class="page-title">🗑️ Retirer de ma bibliothèque</h1>
+  <h1 class="page-title">Retirer de ma bibliothèque</h1>
 
   <div class="card">
     <p>
@@ -10,14 +10,14 @@
       de votre bibliothèque ?
     </p>
     <p class="text-muted">
-      ⚠️ Cette action ne supprime pas le livre du catalogue commun. Vous pourrez
-      le rajouter plus tard.
+      Cette action ne supprime pas le livre du catalogue commun. Vous pourrez le
+      rajouter plus tard.
     </p>
 
     <form method="post" style="margin-top: 1.5rem">
       {% csrf_token %}
       <div style="display: flex; gap: 0.75rem">
-        <button type="submit" class="btn btn-danger">🗑️ Oui, retirer</button>
+        <button type="submit" class="btn btn-danger">Oui, retirer</button>
         <a href="{% url 'my-books' %}" class="btn btn-outline">Annuler</a>
       </div>
     </form>

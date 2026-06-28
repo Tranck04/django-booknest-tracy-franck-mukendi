@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block title %}
     {% if object %}Modifier — {{ object.book.title }}{% else %}Ajouter un livre{% endif %}
     — BookNest
@@ -9,9 +8,9 @@
 <div style="max-width:700px; margin:2rem auto;">
     <h1 class="page-title">
         {% if object %}
-            ✏️ Modifier « {{ object.book.title }} »
+            Modifier « {{ object.book.title }} »
         {% else %}
-            📥 Ajouter un livre à ma bibliothèque
+            Ajouter un livre à ma bibliothèque
         {% endif %}
     </h1>
 
@@ -20,8 +19,7 @@
             {% csrf_token %}
 
             {% if not object %}
-                <!-- Champs pour créer un nouveau Book dans le catalogue -->
-                <h3 class="section-title">📖 Informations du livre</h3>
+                <h3 class="section-title">Informations du livre</h3>
 
                 <div class="form-group">
                     <label for="id_title">Titre *</label>
@@ -64,26 +62,25 @@
                 </div>
             {% endif %}
 
-            <!-- Champs UserBook (toujours présents) -->
-            <h3 class="section-title">📊 Mes informations de lecture</h3>
+            <h3 class="section-title">Mes informations de lecture</h3>
 
             <div class="form-group">
                 <label for="id_reading_status">Statut de lecture</label>
                 <select name="reading_status" id="id_reading_status" class="form-control">
-                    <option value="to_read" {% if form.reading_status.value == 'to_read' %}selected{% endif %}>📋 À lire</option>
-                    <option value="reading" {% if form.reading_status.value == 'reading' %}selected{% endif %}>📖 En cours</option>
-                    <option value="finished" {% if form.reading_status.value == 'finished' %}selected{% endif %}>✅ Terminé</option>
+                    <option value="to_read" {% if form.reading_status.value == 'to_read' %}selected{% endif %}>À lire</option>
+                    <option value="reading" {% if form.reading_status.value == 'reading' %}selected{% endif %}>En cours</option>
+                    <option value="finished" {% if form.reading_status.value == 'finished' %}selected{% endif %}>Terminé</option>
                 </select>
             </div>
 
             <div class="form-group" style="display:flex; gap:2rem;">
                 <label>
                     <input type="checkbox" name="is_favorite" {% if form.is_favorite.value %}checked{% endif %}>
-                    ⭐ Favori
+                    Favori
                 </label>
                 <label>
                     <input type="checkbox" name="is_read_later" {% if form.is_read_later.value %}checked{% endif %}>
-                    🔖 À lire plus tard
+                    À lire plus tard
                 </label>
             </div>
 
@@ -102,11 +99,11 @@
                     <label for="id_rating">Évaluation</label>
                     <select name="rating" id="id_rating" class="form-control">
                         <option value="">---</option>
-                        <option value="1" {% if form.rating.value == 1 %}selected{% endif %}>★☆☆☆☆</option>
-                        <option value="2" {% if form.rating.value == 2 %}selected{% endif %}>★★☆☆☆</option>
-                        <option value="3" {% if form.rating.value == 3 %}selected{% endif %}>★★★☆☆</option>
-                        <option value="4" {% if form.rating.value == 4 %}selected{% endif %}>★★★★☆</option>
-                        <option value="5" {% if form.rating.value == 5 %}selected{% endif %}>★★★★★</option>
+                        <option value="1" {% if form.rating.value == 1 %}selected{% endif %}>1 étoile</option>
+                        <option value="2" {% if form.rating.value == 2 %}selected{% endif %}>2 étoiles</option>
+                        <option value="3" {% if form.rating.value == 3 %}selected{% endif %}>3 étoiles</option>
+                        <option value="4" {% if form.rating.value == 4 %}selected{% endif %}>4 étoiles</option>
+                        <option value="5" {% if form.rating.value == 5 %}selected{% endif %}>5 étoiles</option>
                     </select>
                 </div>
             {% endif %}
@@ -119,7 +116,7 @@
 
             <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
                 <button type="submit" class="btn btn-success">
-                    {% if object %}💾 Enregistrer{% else %}📥 Ajouter à ma bibliothèque{% endif %}
+                    {% if object %}Enregistrer{% else %}Ajouter à ma bibliothèque{% endif %}
                 </button>
                 <a href="{% url 'my-books' %}" class="btn btn-outline">Annuler</a>
             </div>

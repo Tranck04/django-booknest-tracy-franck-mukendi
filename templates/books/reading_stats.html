@@ -1,8 +1,7 @@
 {% extends 'base.html' %} {% block title %}Statistiques — BookNest{% endblock %}
 {% block content %}
-<h1 class="page-title">📊 Statistiques de lecture</h1>
+<h1 class="page-title">Statistiques de lecture</h1>
 
-<!-- Résumé -->
 <div class="stats-row">
   <div class="stat-box">
     <div class="stat-number">{{ total }}</div>
@@ -10,7 +9,7 @@
   </div>
   <div class="stat-box">
     <div class="stat-number">{{ favorites }}</div>
-    <div class="stat-label">⭐ Favoris</div>
+    <div class="stat-label">Favoris</div>
   </div>
   <div class="stat-box">
     <div class="stat-number">{{ completion_rate }}%</div>
@@ -24,24 +23,22 @@
   {% endif %}
 </div>
 
-<!-- Répartition par statut -->
 <div class="card">
-  <h2 class="section-title">📋 Par statut de lecture</h2>
+  <h2 class="section-title">Par statut de lecture</h2>
   <div class="stats-row">
     <div class="stat-box">
       <div class="stat-number">{{ to_read }}</div>
-      <div class="stat-label">📋 À lire ({{ to_read_pct }}%)</div>
+      <div class="stat-label">À lire ({{ to_read_pct }}%)</div>
     </div>
     <div class="stat-box">
       <div class="stat-number">{{ reading }}</div>
-      <div class="stat-label">📖 En cours ({{ reading_pct }}%)</div>
+      <div class="stat-label">En cours ({{ reading_pct }}%)</div>
     </div>
     <div class="stat-box">
       <div class="stat-number">{{ finished }}</div>
-      <div class="stat-label">✅ Terminés ({{ finished_pct }}%)</div>
+      <div class="stat-label">Terminés ({{ finished_pct }}%)</div>
     </div>
   </div>
-  <!-- Barres de progression -->
   <div style="margin-top: 1rem">
     <div
       style="
@@ -51,7 +48,7 @@
         gap: 0.5rem;
       "
     >
-      <span style="width: 80px; font-size: 0.85rem">📋 À lire</span>
+      <span style="width: 80px; font-size: 0.85rem">À lire</span>
       <div
         style="
           flex: 1;
@@ -74,7 +71,7 @@
         gap: 0.5rem;
       "
     >
-      <span style="width: 80px; font-size: 0.85rem">📖 En cours</span>
+      <span style="width: 80px; font-size: 0.85rem">En cours</span>
       <div
         style="
           flex: 1;
@@ -90,7 +87,7 @@
       <span style="width: 40px; font-size: 0.85rem">{{ reading_pct }}%</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem">
-      <span style="width: 80px; font-size: 0.85rem">✅ Terminés</span>
+      <span style="width: 80px; font-size: 0.85rem">Terminés</span>
       <div
         style="
           flex: 1;
@@ -108,10 +105,9 @@
   </div>
 </div>
 
-<!-- Répartition par catégorie -->
 {% if by_category %}
 <div class="card">
-  <h2 class="section-title">📂 Par catégorie</h2>
+  <h2 class="section-title">Par catégorie</h2>
   <table style="width: 100%; border-collapse: collapse">
     <thead>
       <tr style="border-bottom: 2px solid var(--color-border)">
@@ -131,12 +127,9 @@
     </tbody>
   </table>
 </div>
-{% endif %}
-
-<!-- Top livres -->
-{% if best_rated %}
+{% endif %} {% if best_rated %}
 <div class="card">
-  <h2 class="section-title">🏆 Mes livres les mieux notés</h2>
+  <h2 class="section-title">Mes livres les mieux notés</h2>
   {% for ub in best_rated %}
   <p>
     {{ ub.get_rating_display }}
@@ -145,12 +138,9 @@
   </p>
   {% endfor %}
 </div>
-{% endif %}
-
-<!-- Derniers ajouts -->
-{% if recently_added %}
+{% endif %} {% if recently_added %}
 <div class="card">
-  <h2 class="section-title">🆕 Derniers ajouts</h2>
+  <h2 class="section-title">Derniers ajouts</h2>
   {% for ub in recently_added %}
   <p>
     <a href="{% url 'book-detail' ub.book.pk %}">{{ ub.book.title }}</a>
@@ -162,7 +152,7 @@
 
 <div class="text-center mt-2">
   <a href="{% url 'my-books' %}" class="btn btn-outline"
-    >← Retour à ma bibliothèque</a
+    >Retour à ma bibliothèque</a
   >
 </div>
 {% endblock %}
