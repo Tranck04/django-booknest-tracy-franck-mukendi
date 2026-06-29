@@ -1,60 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}À propos — BookNest{% endblock %}
+{% block title %}À propos - BookNest{% endblock %}
 {% block content %}
-<h1 class="page-title">À propos de BookNest</h1>
+<div class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="page-kicker">Projet Django</p>
+      <h1 class="page-title">À propos de BookNest</h1>
+      <p class="page-subtitle">Une application de gestion de bibliothèque personnelle construite avec Django.</p>
+    </div>
+  </header>
 
-<div class="card">
-  <h2 class="section-title">Notre mission</h2>
-  <p>
-    BookNest est une plateforme de
-    <strong>gestion de bibliothèque personnelle en ligne</strong>. Elle permet
-    aux lecteurs de cataloguer leurs livres, de suivre leur progression de
-    lecture et de partager leurs avis avec la communauté.
-  </p>
-</div>
+  <section class="card prose">
+    <h2 class="section-title">Mission</h2>
+    <p>
+      BookNest centralise un catalogue commun de livres tout en laissant chaque lecteur gérer sa propre bibliothèque, ses statuts de lecture, ses favoris, ses notes et ses commentaires.
+    </p>
+  </section>
 
-<div class="card">
-  <h2 class="section-title">Fonctionnalités</h2>
-  <ul>
-    <li>
-      <strong>Catalogue commun</strong> : une base centralisée de livres
-      enrichie par la communauté
-    </li>
-    <li>
-      <strong>Bibliothèque personnelle</strong> : gérez votre propre collection
-      de livres
-    </li>
-    <li>
-      <strong>Suivi de lecture</strong> : marquez vos livres comme « à lire », «
-      en cours » ou « terminé »
-    </li>
-    <li><strong>Favoris</strong> : mettez en avant vos livres préférés</li>
-    <li>
-      <strong>Notes et commentaires</strong> : gardez une trace de vos
-      impressions de lecture
-    </li>
-    <li>
-      <strong>Anti-doublon</strong> : le catalogue évite les doublons de livres
-    </li>
-  </ul>
-</div>
+  <section class="card-grid">
+    <article class="card prose">
+      <h2 class="section-title">Fonctionnalités</h2>
+      <ul>
+        <li>Catalogue commun avec catégories.</li>
+        <li>Bibliothèque personnelle par utilisateur.</li>
+        <li>Suivi de lecture : à lire, en cours, terminé.</li>
+        <li>Favoris, liste à lire plus tard, notes et commentaires.</li>
+        <li>Mécanisme anti-doublon lors de l'ajout.</li>
+      </ul>
+    </article>
 
-<div class="card">
-  <h2 class="section-title">Technologies utilisées</h2>
-  <ul>
-    <li><strong>Python 3</strong> — langage de programmation</li>
-    <li><strong>Django</strong> — framework web</li>
-    <li><strong>SQLite</strong> — base de données</li>
-    <li><strong>HTML5 & CSS3</strong> — interface utilisateur</li>
-    <li><strong>Git & GitHub</strong> — versionnement et collaboration</li>
-  </ul>
-</div>
+    <article class="card prose">
+      <h2 class="section-title">Technologies</h2>
+      <ul>
+        <li>Python 3 et Django.</li>
+        <li>SQLite pour la base de données.</li>
+        <li>Templates Django, HTML et CSS.</li>
+        <li>Git et GitHub pour le versionnement.</li>
+      </ul>
+    </article>
+  </section>
 
-<div class="card">
-  <h2 class="section-title">Auteurs</h2>
-  <p>
-    Projet réalisé dans le cadre du cours Django — Année universitaire
-    2025-2026.
-  </p>
+  <section class="card prose">
+    <h2 class="section-title">Cadre</h2>
+    <p>Projet réalisé dans le cadre du cours Django - année universitaire 2025-2026.</p>
+  </section>
 </div>
 {% endblock %}

@@ -1,31 +1,29 @@
-{% extends 'base.html' %} {% block title %}Catégories — BookNest{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Catégories - BookNest{% endblock %}
 {% block content %}
-<h1 class="page-title">Catégories</h1>
+<div class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="page-kicker">Classement</p>
+      <h1 class="page-title">Catégories</h1>
+      <p class="page-subtitle">Parcourez le catalogue par univers de lecture.</p>
+    </div>
+  </header>
 
-<div class="card-grid">
-  {% for category in categories %}
-  <div class="card">
-    <h3 class="book-title">
-      <a href="{% url 'catalogue' %}?category={{ category.id }}"
-        >{{ category.name }}</a
-      >
-    </h3>
-    {% if category.description %}
-    <p class="text-muted" style="margin-top: 0.5rem">
-      {{ category.description }}
-    </p>
-    {% endif %}
-    <p style="margin-top: 0.75rem">
-      <span class="badge badge-reading"
-        >{{ category.book_count }} livre{{ category.book_count|pluralize
-        }}</span
-      >
-    </p>
-  </div>
-  {% empty %}
-  <div class="empty-state">
-    <p>Aucune catégorie pour le moment.</p>
-  </div>
-  {% endfor %}
+  <section class="card-grid">
+    {% for category in categories %}
+    <article class="card prose">
+      <h2 class="book-title">
+        <a href="{% url 'catalogue' %}?category={{ category.id }}">{{ category.name }}</a>
+      </h2>
+      {% if category.description %}<p class="text-muted">{{ category.description }}</p>{% endif %}
+      <span class="badge badge-reading">{{ category.book_count }} livre{{ category.book_count|pluralize }}</span>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+      <p>Aucune catégorie pour le moment.</p>
+    </div>
+    {% endfor %}
+  </section>
 </div>
 {% endblock %}

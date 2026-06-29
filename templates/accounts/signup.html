@@ -1,28 +1,30 @@
-{% extends 'base.html' %} {% block title %}Inscription — BookNest{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Inscription - BookNest{% endblock %}
 {% block content %}
-<div style="max-width: 450px; margin: 2rem auto">
-  <h1 class="page-title">Inscription</h1>
+<div class="auth-shell page-shell">
+  <header class="page-header">
+    <div>
+      <p class="page-kicker">Compte</p>
+      <h1 class="page-title">Inscription</h1>
+      <p class="page-subtitle">Créez votre espace de lecture personnel.</p>
+    </div>
+  </header>
 
-  <div class="card">
+  <section class="form-panel">
     <form method="post">
-      {% csrf_token %} {% for field in form %}
+      {% csrf_token %}
+      {% for field in form %}
       <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }} {% if field.errors %}
-        <div class="form-errors">{{ field.errors }}</div>
-        {% endif %} {% if field.help_text %}
-        <small class="text-muted">{{ field.help_text }}</small>
-        {% endif %}
+        {{ field }}
+        {% if field.errors %}<div class="form-errors">{{ field.errors }}</div>{% endif %}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
       </div>
       {% endfor %}
-      <button type="submit" class="btn btn-success" style="width: 100%">
-        Créer mon compte
-      </button>
+      <button type="submit" class="btn btn-primary btn-full">Créer mon compte</button>
     </form>
-  </div>
+  </section>
 
-  <p class="text-center mt-1">
-    Déjà un compte ? <a href="{% url 'accounts:login' %}">Connectez-vous</a>
-  </p>
+  <p class="text-center">Déjà un compte ? <a href="{% url 'accounts:login' %}">Connectez-vous</a></p>
 </div>
 {% endblock %}

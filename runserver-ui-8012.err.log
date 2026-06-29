@@ -1,0 +1,12 @@
+[29/Jun/2026 17:23:50] "GET / HTTP/1.1" 200 5231
+[29/Jun/2026 17:23:50,965] - Broken pipe from ('127.0.0.1', 60251)
+[29/Jun/2026 17:24:28] "GET / HTTP/1.1" 200 5231
+[29/Jun/2026 17:24:28,135] - Broken pipe from ('127.0.0.1', 60777)
+[29/Jun/2026 17:28:43] "GET / HTTP/1.1" 200 5826
+[29/Jun/2026 17:28:43] "GET /static/css/style.css HTTP/1.1" 200 16417
+[29/Jun/2026 17:28:43] "GET /media/book_covers/processus_commande_voyage.svg HTTP/1.1" 200 26845
+Not Found: /favicon.ico
+[29/Jun/2026 17:28:44] "GET /favicon.ico HTTP/1.1" 404 5751
+[29/Jun/2026 17:28:59] "GET /catalogue/ HTTP/1.1" 200 6414
+[29/Jun/2026 17:29:11] "GET /my-books/ HTTP/1.1" 200 3505
+[29/Jun/2026 17:29:33] "GET / HTTP/1.1" 200 5826

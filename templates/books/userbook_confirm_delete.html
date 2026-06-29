@@ -1,26 +1,25 @@
-{% extends 'base.html' %} {% block title %}Retirer — {{ user_book.book.title }}
-— BookNest{% endblock %} {% block content %}
-<div style="max-width: 500px; margin: 2rem auto">
-  <h1 class="page-title">Retirer de ma bibliothèque</h1>
+{% extends 'base.html' %}
+{% block title %}Retirer - {{ user_book.book.title }} - BookNest{% endblock %}
+{% block content %}
+<div class="confirm-shell page-shell">
+  <header class="page-header">
+    <div>
+      <p class="page-kicker">Confirmation</p>
+      <h1 class="page-title">Retirer ce livre</h1>
+      <p class="page-subtitle">{{ user_book.book.title }} restera disponible dans le catalogue commun.</p>
+    </div>
+  </header>
 
-  <div class="card">
-    <p>
-      Êtes-vous sûr de vouloir retirer
-      <strong>{{ user_book.book.title }}</strong>
-      de votre bibliothèque ?
-    </p>
-    <p class="text-muted">
-      Cette action ne supprime pas le livre du catalogue commun. Vous pourrez le
-      rajouter plus tard.
-    </p>
-
-    <form method="post" style="margin-top: 1.5rem">
+  <section class="form-panel prose">
+    <p>Êtes-vous sûr de vouloir retirer <strong>{{ user_book.book.title }}</strong> de votre bibliothèque ?</p>
+    <p class="text-muted">Cette action ne supprime pas le livre du catalogue. Vous pourrez le rajouter plus tard.</p>
+    <form method="post">
       {% csrf_token %}
-      <div style="display: flex; gap: 0.75rem">
+      <div class="action-row">
         <button type="submit" class="btn btn-danger">Oui, retirer</button>
         <a href="{% url 'my-books' %}" class="btn btn-outline">Annuler</a>
       </div>
     </form>
-  </div>
+  </section>
 </div>
 {% endblock %}

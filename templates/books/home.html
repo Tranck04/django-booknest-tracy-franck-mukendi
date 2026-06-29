@@ -1,56 +1,79 @@
 {% extends 'base.html' %}
-{% block title %}BookNest — Accueil{% endblock %}
+{% block title %}BookNest - Accueil{% endblock %}
 {% block content %}
-<div class="text-center mb-2">
-  <h1 class="page-title">Bienvenue sur BookNest</h1>
-  <p class="page-subtitle">
-    Votre bibliothèque personnelle en ligne — Cataloguez, organisez, lisez.
-  </p>
-</div>
+<div class="page-shell">
+  <section class="hero">
+    <div>
+      <p class="page-kicker">Bibliothèque personnelle</p>
+      <h1 class="page-title">BookNest</h1>
+      <p class="page-subtitle">
+        Un catalogue commun, des bibliothèques privées, et un suivi de lecture clair.
+      </p>
+      <div class="hero-actions mt-1">
+        <a href="{% url 'catalogue' %}" class="btn btn-primary">Parcourir le catalogue</a>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'accounts:signup' %}" class="btn btn-outline">Créer un compte</a>
+        {% else %}
+        <a href="{% url 'my-books' %}" class="btn btn-outline">Ouvrir ma bibliothèque</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
 
-<div class="stats-row">
-  <div class="stat-box">
-    <div class="stat-number">{{ total_books }}</div>
-    <div class="stat-label">Livres au catalogue</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-number">{{ total_categories }}</div>
-    <div class="stat-label">Catégories</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-number">{{ total_users }}</div>
-    <div class="stat-label">Lecteurs</div>
-  </div>
-</div>
+  <section class="stats-grid" aria-label="Statistiques globales">
+    <div class="stat-box">
+      <div class="stat-number">{{ total_books }}</div>
+      <div class="stat-label">Livres au catalogue</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">{{ total_categories }}</div>
+      <div class="stat-label">Catégories</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">{{ total_users }}</div>
+      <div class="stat-label">Lecteurs</div>
+    </div>
+  </section>
 
-<div class="section-title">Derniers livres ajoutés</div>
-<div class="card-grid">
-  {% for book in latest_books %}
-  <div class="card">
-    <h3 class="book-title">
-      <a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a>
-    </h3>
-    <p class="book-author">{{ book.author }}</p>
-    {% if book.category %}
-    <span class="badge badge-reading">{{ book.category.name }}</span>
-    {% endif %}
-    <p class="text-muted" style="font-size: 0.85rem; margin-top: 0.5rem">
-      Ajouté le {{ book.added_to_catalog|date:"d/m/Y" }}
-    </p>
-  </div>
-  {% empty %}
-  <p>Aucun livre dans le catalogue pour le moment.</p>
-  {% endfor %}
-</div>
+  <section>
+    <div class="page-header mb-1">
+      <div>
+        <p class="page-kicker">Catalogue</p>
+        <h2 class="section-title">Derniers livres ajoutés</h2>
+      </div>
+      <a href="{% url 'catalogue' %}" class="btn btn-outline btn-sm">Tout voir</a>
+    </div>
 
-<div class="text-center mt-2">
-  <a href="{% url 'catalogue' %}" class="btn btn-primary"
-    >Voir tout le catalogue</a
-  >
-  {% if not user.is_authenticated %}
-  <a href="{% url 'accounts:signup' %}" class="btn btn-success">Créer un compte</a>
-  {% else %}
-  <a href="{% url 'my-books' %}" class="btn btn-success">Ma Bibliothèque</a>
-  {% endif %}
+    <div class="book-grid">
+      {% for book in latest_books %}
+      <article class="book-card">
+        <div class="cover-frame compact">
+          {% if book.cover_image %}
+          <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover" />
+          {% elif book.cover_url %}
+          <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover" />
+          {% else %}
+          <div class="cover-placeholder">{{ book.title }}</div>
+          {% endif %}
+        </div>
+        <div class="book-card-body">
+          <h3 class="book-title"><a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a></h3>
+          <p class="book-author">{{ book.author }}</p>
+          <div class="book-meta">
+            {% if book.category %}<span class="badge badge-reading">{{ book.category.name }}</span>{% endif %}
+            <span class="badge badge-muted">{{ book.added_to_catalog|date:"d/m/Y" }}</span>
+          </div>
+        </div>
+      </article>
+      {% empty %}
+      <div class="empty-state">
+        <p>Aucun livre dans le catalogue pour le moment.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'userbook-create' %}" class="btn btn-primary">Ajouter un livre</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}

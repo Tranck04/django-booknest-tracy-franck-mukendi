@@ -1,99 +1,84 @@
 {% extends 'base.html' %}
-{% block title %}{{ book.title }} — BookNest{% endblock %}
+{% block title %}{{ book.title }} - BookNest{% endblock %}
 {% block content %}
-<div class="detail-grid">
-  <div>
-    {% if book.cover_image %}
-    <img
-      src="{{ book.cover_image.url }}"
-      alt="{{ book.title }}"
-      class="detail-cover"
-    />
-    {% elif book.cover_url %}
-    <img
-      src="{{ book.cover_url }}"
-      alt="{{ book.title }}"
-      class="detail-cover"
-    />
-    {% else %}
-    <div class="detail-cover-placeholder">Pas de couverture</div>
-    {% endif %}
-  </div>
-
-  <div>
-    <h1 class="page-title" style="margin-bottom: 0.25rem">{{ book.title }}</h1>
-    <p style="font-size: 1.2rem; color: var(--color-text-light)">
-      par <strong>{{ book.author }}</strong>
-    </p>
-
-    <div class="detail-meta">
-      {% if book.publication_year %}
-      <span>Année : {{ book.publication_year }}</span>
-      {% endif %} {% if book.isbn %}
-      <span>ISBN : {{ book.isbn }}</span>
-      {% endif %} {% if book.category %}
-      <span class="badge badge-reading">{{ book.category.name }}</span>
-      {% endif %}
-    </div>
-
-    {% if avg_rating %}
-    <p style="margin-top: 0.5rem">
-      Note moyenne : <strong>{{ avg_rating|stringformat:".1f" }} / 5</strong>
-      ({{ rating_count }} avis)
-    </p>
-    {% endif %} {% if book.summary %}
-    <div class="card" style="margin-top: 1rem">
-      <h3 class="section-title">Résumé</h3>
-      <p>{{ book.summary|linebreaksbr }}</p>
-    </div>
-    {% endif %}
-
-    <p class="text-muted" style="font-size: 0.85rem; margin-top: 1rem">
-      Ajouté au catalogue le {{ book.added_to_catalog|date:"d/m/Y" }}
-    </p>
-
-    <div
-      style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap"
-    >
-      {% if user.is_authenticated %} {% if user_book %}
-      <span class="badge badge-finished">Dans ma bibliothèque</span>
-      <a
-        href="{% url 'userbook-update' user_book.pk %}"
-        class="btn btn-outline btn-sm"
-        >Modifier</a
-      >
+<div class="page-shell">
+  <section class="detail-grid">
+    <div class="detail-cover-card">
+      {% if book.cover_image %}
+      <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="detail-cover" />
+      {% elif book.cover_url %}
+      <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="detail-cover" />
       {% else %}
-      <a href="{% url 'userbook-create' %}" class="btn btn-success"
-        >Ajouter à ma bibliothèque</a
-      >
-      {% endif %} {% else %}
-      <a href="{% url 'accounts:login' %}" class="btn btn-primary"
-        >Connectez-vous pour ajouter ce livre</a
-      >
+      <div class="detail-cover-placeholder">{{ book.title }}</div>
       {% endif %}
-      <a href="{% url 'catalogue' %}" class="btn btn-outline btn-sm"
-        >Retour au catalogue</a
-      >
     </div>
-  </div>
-</div>
 
-{% if reviews %}
-<div class="mt-2">
-  <h2 class="section-title">Avis de la communauté</h2>
-  {% for review in reviews %}
-  <div class="card">
-    <div class="flex-between">
-      <strong>{{ review.user.username }}</strong>
-      {% if review.rating %}
-      <span>{{ review.get_rating_display }}</span>
+    <div class="detail-panel">
+      <div>
+        <p class="page-kicker">Fiche livre</p>
+        <h1 class="page-title">{{ book.title }}</h1>
+        <p class="page-subtitle">par <strong>{{ book.author }}</strong></p>
+      </div>
+
+      <div class="detail-meta">
+        {% if book.publication_year %}<span class="meta-chip">Année {{ book.publication_year }}</span>{% endif %}
+        {% if book.isbn %}<span class="meta-chip">ISBN {{ book.isbn }}</span>{% endif %}
+        {% if book.category %}<span class="badge badge-reading">{{ book.category.name }}</span>{% endif %}
+      </div>
+
+      {% if avg_rating %}
+      <div class="stat-box">
+        <div class="stat-number">{{ avg_rating|stringformat:".1f" }} / 5</div>
+        <div class="stat-label">Note moyenne sur {{ rating_count }} avis</div>
+      </div>
       {% endif %}
+
+      {% if book.summary %}
+      <section class="card prose">
+        <h2 class="section-title">Résumé</h2>
+        <p>{{ book.summary|linebreaksbr }}</p>
+      </section>
+      {% endif %}
+
+      <p class="text-muted">Ajouté au catalogue le {{ book.added_to_catalog|date:"d/m/Y" }}</p>
+
+      <div class="action-row">
+        {% if user.is_authenticated %}
+          {% if user_book %}
+          <span class="badge badge-finished">Dans ma bibliothèque</span>
+          <a href="{% url 'userbook-update' user_book.pk %}" class="btn btn-outline">Modifier ma fiche</a>
+          {% else %}
+          <a href="{% url 'userbook-create' %}" class="btn btn-primary">Ajouter à ma bibliothèque</a>
+          {% endif %}
+        {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Se connecter pour ajouter ce livre</a>
+        {% endif %}
+        <a href="{% url 'catalogue' %}" class="btn btn-outline">Retour au catalogue</a>
+      </div>
     </div>
-    <p style="margin-top: 0.5rem">{{ review.comment|linebreaksbr }}</p>
-    <p class="text-muted" style="font-size: 0.8rem">
-      {{ review.updated_at|date:"d/m/Y" }}
-    </p>
-  </div>
-  {% endfor %}
+  </section>
+
+  {% if reviews %}
+  <section>
+    <div class="page-header mb-1">
+      <div>
+        <p class="page-kicker">Communauté</p>
+        <h2 class="section-title">Avis des lecteurs</h2>
+      </div>
+    </div>
+    <div class="review-list">
+      {% for review in reviews %}
+      <article class="review-card">
+        <div class="flex-between">
+          <strong>{{ review.user.username }}</strong>
+          {% if review.rating %}<span class="badge badge-muted">{{ review.get_rating_display }}</span>{% endif %}
+        </div>
+        <p>{{ review.comment|linebreaksbr }}</p>
+        <p class="text-muted">{{ review.updated_at|date:"d/m/Y" }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 </div>
-{% endif %} {% endblock %}
+{% endblock %}

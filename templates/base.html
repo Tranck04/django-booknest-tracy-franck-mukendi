@@ -9,7 +9,7 @@
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Navigation principale">
       <div class="container nav-container">
         <a href="{% url 'home' %}" class="nav-brand">BookNest</a>
         <ul class="nav-links">
@@ -19,27 +19,21 @@
           <li><a href="{% url 'about' %}">À propos</a></li>
 
           {% if user.is_authenticated %}
-          <li>
-            <a href="{% url 'my-books' %}" class="nav-highlight"
-              >Ma Bibliothèque</a
-            >
-          </li>
+          <li><a href="{% url 'my-books' %}" class="nav-highlight">Ma bibliothèque</a></li>
           <li><a href="{% url 'my-favorites' %}">Favoris</a></li>
           <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
           <li><a href="{% url 'reading-stats' %}">Statistiques</a></li>
+          <li><a href="{% url 'accounts:password_change' %}">Mot de passe</a></li>
           <li>
             <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
               {% csrf_token %}
               <button type="submit" class="btn-link">Déconnexion</button>
             </form>
           </li>
-          <li><a href="{% url 'accounts:password_change' %}">Changer mot de passe</a></li>
           <li class="nav-user">{{ user.username }}</li>
           {% else %}
           <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
-          <li>
-            <a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a>
-          </li>
+          <li><a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a></li>
           {% endif %}
         </ul>
       </div>
@@ -54,15 +48,12 @@
     {% endif %}
 
     <main class="container main-content">
-      {% block content %} {% endblock %}
+      {% block content %}{% endblock %}
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>
-          &copy; 2025 BookNest — Bibliothèque personnelle en ligne | Projet
-          Django
-        </p>
+        <p>&copy; 2025 BookNest - Bibliothèque personnelle en ligne</p>
       </div>
     </footer>
 
