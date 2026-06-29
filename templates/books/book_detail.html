@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block title %}{{ book.title }} — BookNest{%
-endblock %} {% block content %}
+{% extends 'base.html' %}
+{% block title %}{{ book.title }} — BookNest{% endblock %}
+{% block content %}
 <div class="detail-grid">
   <div>
     {% if book.cover_image %}
@@ -31,7 +32,7 @@ endblock %} {% block content %}
 
     {% if avg_rating %}
     <p style="margin-top: 0.5rem">
-      Note moyenne : <strong>{{ avg_rating|floatformat:1 }} / 5</strong>
+      Note moyenne : <strong>{{ avg_rating|stringformat:".1f" }} / 5</strong>
       ({{ rating_count }} avis)
     </p>
     {% endif %} {% if book.summary %}
@@ -60,7 +61,7 @@ endblock %} {% block content %}
         >Ajouter à ma bibliothèque</a
       >
       {% endif %} {% else %}
-      <a href="{% url 'login' %}" class="btn btn-primary"
+      <a href="{% url 'accounts:login' %}" class="btn btn-primary"
         >Connectez-vous pour ajouter ce livre</a
       >
       {% endif %}

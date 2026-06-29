@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block title %}Catalogue — BookNest{% endblock %} {%
-block content %}
+{% extends 'base.html' %}
+{% block title %}Catalogue — BookNest{% endblock %}
+{% block content %}
 <h1 class="page-title">Catalogue</h1>
 
 <div class="filters">
@@ -10,14 +11,7 @@ block content %}
     <option value="">Toutes les catégories</option>
     {% for cat in categories %}
     <option
-      value="{{ cat.id }}"
-      {%
-      if
-      current_category=""
-      ="cat.id"
-      %}selected{%
-      endif
-      %}
+      value="{{ cat.id }}" {% if current_category == cat.id %}selected{% endif %}
     >
       {{ cat.name }} ({{ cat.book_count }})
     </option>

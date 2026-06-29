@@ -28,16 +28,16 @@
           <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
           <li><a href="{% url 'reading-stats' %}">Statistiques</a></li>
           <li>
-            <form method="post" action="{% url 'logout' %}" class="logout-form">
+            <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
               {% csrf_token %}
               <button type="submit" class="btn-link">Déconnexion</button>
             </form>
           </li>
           <li class="nav-user">{{ user.username }}</li>
           {% else %}
-          <li><a href="{% url 'login' %}">Connexion</a></li>
+          <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
           <li>
-            <a href="{% url 'signup' %}" class="nav-highlight">Inscription</a>
+            <a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a>
           </li>
           {% endif %}
         </ul>

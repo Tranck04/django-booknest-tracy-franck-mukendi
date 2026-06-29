@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block title %}Ma Bibliothèque — BookNest{% endblock
-%} {% block content %}
+{% extends 'base.html' %}
+{% block title %}Ma Bibliothèque — BookNest{% endblock %}
+{% block content %}
 <div class="flex-between">
   <h1 class="page-title">{{ page_title|default:"Ma Bibliothèque" }}</h1>
   <a href="{% url 'userbook-create' %}" class="btn btn-success"
