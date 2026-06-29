@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import URLValidator
 
 
 class Category(models.Model):
@@ -54,7 +55,12 @@ class Book(models.Model):
         upload_to='book_covers/',
         blank=True,
         null=True,
-        verbose_name="Image de couverture"
+        verbose_name="Image de couverture (fichier)"
+    )
+    cover_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="URL de couverture (lien externe)"
     )
     category = models.ForeignKey(
         Category,

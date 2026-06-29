@@ -9,6 +9,12 @@
       alt="{{ book.title }}"
       class="detail-cover"
     />
+    {% elif book.cover_url %}
+    <img
+      src="{{ book.cover_url }}"
+      alt="{{ book.title }}"
+      class="detail-cover"
+    />
     {% else %}
     <div class="detail-cover-placeholder">Pas de couverture</div>
     {% endif %}

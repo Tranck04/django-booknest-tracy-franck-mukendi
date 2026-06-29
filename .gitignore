@@ -1,1 +1,21 @@
-.venv
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+db.sqlite3
+
+# Node
+node_modules/
+package-lock.json
+
+# Documents générés
+*.docx
+
+# Media uploads
+media/book_covers/*
+
+# IDE
+.vscode/
+.idea/

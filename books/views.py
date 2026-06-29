@@ -155,6 +155,7 @@ class UserBookCreateView(LoginRequiredMixin, CreateView):
 
         if not book:
             # Créer un nouveau livre dans le catalogue
+            cover_url = self.request.POST.get('cover_url', '').strip() or None
             book = Book.objects.create(
                 title=title,
                 author=author,
@@ -163,6 +164,7 @@ class UserBookCreateView(LoginRequiredMixin, CreateView):
                 publication_year=self.request.POST.get('publication_year') or None,
                 category_id=self.request.POST.get('category') or None,
                 cover_image=self.request.FILES.get('cover_image'),
+                cover_url=cover_url,
             )
             messages.success(self.request, f"'{book.title}' a été ajouté au catalogue.")
         else:

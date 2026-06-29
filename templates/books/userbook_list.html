@@ -75,6 +75,18 @@
         margin-bottom: 0.75rem;
       "
     />
+    {% elif user_book.book.cover_url %}
+    <img
+      src="{{ user_book.book.cover_url }}"
+      alt="{{ user_book.book.title }}"
+      style="
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+      "
+    />
     {% else %}
     <div
       class="detail-cover-placeholder"
