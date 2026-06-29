@@ -13,43 +13,48 @@
         <div class="container nav-container">
             <a href="{% url 'home' %}" class="nav-brand">BookNest</a>
 
-            <!-- Navigation publique -->
-            <ul class="nav-links nav-main">
-                <li><a href="{% url 'home' %}">Accueil</a></li>
-                <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
-                <li><a href="{% url 'category-list' %}">Catégories</a></li>
-                <li><a href="{% url 'about' %}">À propos</a></li>
-            </ul>
+            <div class="nav-menu">
+                <section class="nav-group nav-public" aria-label="Découvrir">
+                    <span class="nav-group-label">Découvrir</span>
+                    <ul class="nav-links">
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+                        <li><a href="{% url 'category-list' %}">Catégories</a></li>
+                        <li><a href="{% url 'about' %}">À propos</a></li>
+                    </ul>
+                </section>
 
-            <!-- Navigation utilisateur -->
-            <div class="nav-user-section">
                 {% if user.is_authenticated %}
-                    <!-- Dropdown Mon Espace -->
-                    <div class="dropdown">
-                        <button class="dropdown-toggle nav-highlight" aria-haspopup="true" aria-expanded="false">
-                            Mon Espace ▾
-                        </button>
-                        <ul class="dropdown-menu" aria-label="Menu utilisateur">
-                            <li><a href="{% url 'my-books' %}">Ma Bibliothèque</a></li>
-                            <li><a href="{% url 'my-favorites' %}">Favoris</a></li>
-                            <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
-                            <li><a href="{% url 'reading-stats' %}">Statistiques</a></li>
-                            <li class="dropdown-divider"></li>
-                            <li><a href="{% url 'accounts:password_change' %}">Changer mot de passe</a></li>
-                            <li>
-                                <form method="post" action="{% url 'accounts:logout' %}" class="logout-form dropdown-logout">
-                                    {% csrf_token %}
-                                    <button type="submit">Déconnexion</button>
-                                </form>
-                            </li>
-                        </ul>
+                <section class="nav-group nav-library" aria-label="Bibliothèque personnelle">
+                    <span class="nav-group-label">Bibliothèque</span>
+                    <ul class="nav-links">
+                        <li><a href="{% url 'my-books' %}" class="nav-highlight">Ma bibliothèque</a></li>
+                        <li><a href="{% url 'my-favorites' %}">Favoris</a></li>
+                        <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
+                        <li><a href="{% url 'reading-stats' %}">Stats</a></li>
+                    </ul>
+                </section>
+
+                <details class="account-menu">
+                    <summary class="account-summary">
+                        <span class="nav-user">{{ user.username }}</span>
+                    </summary>
+                    <div class="account-popover">
+                        <a href="{% url 'accounts:password_change' %}" class="account-action">Mot de passe</a>
+                        <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="account-action account-button">Déconnexion</button>
+                        </form>
                     </div>
-                    <span class="nav-user-tag">{{ user.username }}</span>
+                </details>
                 {% else %}
+                <section class="nav-group nav-account" aria-label="Compte visiteur">
+                    <span class="nav-group-label">Compte</span>
                     <ul class="nav-links nav-auth">
                         <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
                         <li><a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a></li>
                     </ul>
+                </section>
                 {% endif %}
             </div>
         </div>
@@ -72,7 +77,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 BookNest — Bibliothèque personnelle en ligne | Projet Django</p>
+            <p>&copy; 2025 BookNest - Bibliothèque personnelle en ligne | Projet Django</p>
         </div>
     </footer>
 
