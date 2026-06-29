@@ -251,7 +251,7 @@ const doc = new Document({
       ...[
         "1. Introduction",
         "2. Analyse et conception",
-        "3. R\u00e9alisation technique",
+        "3. R\u00e9alisation technique (architecture, applications, mod\u00e8les, URLs, templates, formulaires, couvertures, mots de passe, import catalogue, navigation, authentification, suivi et statistiques)",
         "4. Tests et validation",
         "5. Conclusion",
         "6. Annexes"
@@ -265,8 +265,7 @@ const doc = new Document({
       h1("1. Introduction"),
       h2("1.1 Contexte"),
       para("Dans le cadre du cours Django, il a \u00e9t\u00e9 demand\u00e9 de r\u00e9aliser une application web compl\u00e8te respectant l\u2019architecture MVT de Django. Le projet devait mettre en \u0153uvre les notions essentielles du cours : environnement virtuel, applications Django, mod\u00e8les, migrations, administration, vues, templates, formulaires, authentification, op\u00e9rations CRUD, tests automatis\u00e9s et documentation."),
-      para("Le projet choisi est "),
-      para("BookNest, une biblioth\u00e8que personnelle en ligne. L\u2019application permet de consulter un catalogue de livres, d\u2019organiser les ouvrages par cat\u00e9gories, de g\u00e9rer une biblioth\u00e8que propre \u00e0 chaque utilisateur et de suivre sa progression de lecture.", { bold: false }),
+      para("Le projet choisi est BookNest, une biblioth\u00e8que personnelle en ligne. L\u2019application permet de consulter un catalogue de 271 379 livres issus du fichier books.csv, d\u2019organiser les ouvrages par cat\u00e9gories, de g\u00e9rer une biblioth\u00e8que propre \u00e0 chaque utilisateur et de suivre sa progression de lecture. Une commande d\u2019import d\u00e9di\u00e9e (import_books) avec traitement par lots (bulk_create) et gestion des conflits (ignore_conflicts) a permis d\u2019importer l\u2019int\u00e9gralit\u00e9 du dataset."),
       spacer(),
 
       h2("1.2 Probl\u00e8me trait\u00e9"),
@@ -476,7 +475,38 @@ const doc = new Document({
       para("Lors de l\u2019ajout, la vue UserBookCreateView applique la logique anti-doublon, cr\u00e9e le livre si n\u00e9cessaire, puis cr\u00e9e la relation UserBook. La modification met \u00e0 jour le statut, le favori, la note et le commentaire. La suppression retire uniquement le livre de la biblioth\u00e8que personnelle sans toucher au catalogue commun."),
       spacer(),
 
-      h2("3.7 Authentification et s\u00e9curit\u00e9"),
+      h2("3.7 Gestion des couvertures de livres"),
+      para("Le mod\u00e8le Book prend en charge deux sources de couverture :"),
+      bullet("Upload local : champ cover_image (ImageField), stock\u00e9 dans media/book_covers/"),
+      bullet("URL externe : champ cover_url (URLField), affich\u00e9 comme image distante"),
+      para("Dans les templates, l\u2019upload local est prioritaire sur l\u2019URL. Si aucun des deux n\u2019est fourni, un placeholder \u00ab Sans couverture \u00bb est affich\u00e9."),
+      spacer(),
+
+      h2("3.8 Gestion des mots de passe"),
+      para("Le projet int\u00e8gre les vues Django de gestion de mot de passe :"),
+      bullet("Changement de mot de passe : /accounts/password-change/ (accessible depuis la navbar, utilisateur connect\u00e9)"),
+      bullet("R\u00e9initialisation par email : /accounts/password-reset/ (accessible depuis la page de connexion)"),
+      para("L\u2019email de r\u00e9initialisation utilise le backend console (django.core.mail.backends.console.EmailBackend) : le lien de r\u00e9initialisation s\u2019affiche dans le terminal de d\u00e9veloppement."),
+      spacer(),
+
+      h2("3.9 Import du catalogue (271 379 livres)"),
+      para("Une commande Django personnalis\u00e9e (python manage.py import_books) a \u00e9t\u00e9 d\u00e9velopp\u00e9e pour importer le fichier books.csv contenant 271 379 r\u00e9f\u00e9rences :"),
+      bullet("Lecture ligne par ligne avec csv.DictReader (s\u00e9parateur point-virgule)"),
+      bullet("Gestion d\u2019encodage UTF-8 avec remplacement des caract\u00e8res invalides"),
+      bullet("Traitement par lots de 500 livres avec bulk_create(ignore_conflicts=True)"),
+      bullet("R\u00e9cup\u00e9ration de l\u2019URL de couverture (Image-URL-L ou Image-URL-M)"),
+      para("L\u2019import complet s\u2019ex\u00e9cute en environ 2 minutes. La commande est idempotente : les ex\u00e9cutions multiples n\u2019entra\u00eenent pas de doublons."),
+      spacer(),
+
+      h2("3.10 Interface utilisateur et navigation"),
+      para("La barre de navigation a \u00e9t\u00e9 r\u00e9organis\u00e9e pour plus de clart\u00e9 :"),
+      bullet("Section publique \u00e0 gauche : Accueil, Catalogue, Cat\u00e9gories, \u00c0 propos"),
+      bullet("Menu utilisateur regroup\u00e9 dans un dropdown \u00ab Mon Espace \u00bb (CSS uniquement, sans JavaScript)"),
+      bullet("Le dropdown contient : Ma Biblioth\u00e8que, Favoris, \u00c0 lire plus tard, Statistiques, un s\u00e9parateur, Changer mot de passe et D\u00e9connexion"),
+      bullet("Badge utilisateur affich\u00e9 \u00e0 c\u00f4t\u00e9 du dropdown"),
+      spacer(),
+
+      h2("3.11 Authentification et s\u00e9curit\u00e9"),
       bullet("UserCreationForm pour l\u2019inscription"),
       bullet("LoginView et LogoutView Django int\u00e9gr\u00e9s"),
       bullet("LoginRequiredMixin pour prot\u00e9ger les pages priv\u00e9es"),
