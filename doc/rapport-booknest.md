@@ -291,6 +291,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 Les modeles `Category`, `Book` et `UserBook` ont ete crees dans l'application `books`. Ils ont fait l'objet de migrations Django afin de creer la structure de la base SQLite.
 
+<!-- CAPTURE: 01-accueil.png — Page d'accueil avec statistiques -->
+<!-- CAPTURE: 11-admin.png — Django Admin avec la liste des livres -->
+
 Le modele `Book` inclut l'image de couverture via `ImageField`. Cette fonctionnalite est donc integree directement a la gestion des livres : elle intervient dans le modele, dans le formulaire d'ajout, dans la configuration media et dans les templates de catalogue et de detail.
 
 Le modele `UserBook` permet de separer le catalogue commun de la bibliotheque personnelle. Il contient aussi les informations avancees de suivi de lecture : statut, favori, a lire plus tard, note personnelle, commentaire et evaluation.
@@ -331,6 +334,12 @@ Les trois modeles sont administrables depuis Django Admin, ce qui permet a un ad
 
 Les vues generiques de Django sont utilisees pour garder un code clair : `TemplateView`, `ListView`, `DetailView`, `CreateView`, `UpdateView` et `DeleteView`.
 
+<!-- CAPTURE: 02-catalogue.png — Catalogue avec recherche et filtres -->
+<!-- CAPTURE: 03-livre-detail.png — Fiche détaillée avec note moyenne -->
+<!-- CAPTURE: 05-ma-bibliotheque.png — Bibliothèque personnelle -->
+<!-- CAPTURE: 06-favoris.png — Page des favoris -->
+<!-- CAPTURE: 10-dropdown-navbar.png — Navbar avec dropdown Mon Espace déplié -->
+
 ### 3.5 Templates et interface utilisateur
 
 Le projet utilise un template de base `base.html` qui contient la structure commune : navigation, affichage des messages, zone principale et pied de page. Les autres templates heritent de ce fichier et redefinissent les blocs `title` et `content`.
@@ -359,6 +368,8 @@ Captures a inserer dans la version PDF :
 - page statistiques ;
 - resultat des tests.
 
+<!-- CAPTURE: 04-ajout-livre.png — Formulaire d'ajout avec champs remplis -->
+
 ### 3.6 Formulaires, CRUD et anti-doublon
 
 L'ajout d'un livre se fait depuis `userbook_form.html`. Lorsqu'un utilisateur ajoute un livre, le formulaire transmet les informations du livre et les informations de lecture. La vue `UserBookCreateView` applique ensuite la logique suivante :
@@ -372,6 +383,9 @@ L'ajout d'un livre se fait depuis `userbook_form.html`. Lorsqu'un utilisateur aj
 
 La modification permet de mettre a jour le statut, le favori, la liste a lire plus tard, la note personnelle, le commentaire et l'evaluation. La suppression retire uniquement le livre de la bibliotheque personnelle de l'utilisateur ; elle ne supprime pas le livre du catalogue commun.
 
+<!-- CAPTURE: 08-connexion.png — Page de connexion -->
+<!-- CAPTURE: 09-reset-password.png — Page de réinitialisation de mot de passe -->
+
 ### 3.7 Authentification et securite des donnees
 
 L'authentification repose sur le systeme integre de Django :
@@ -382,6 +396,8 @@ L'authentification repose sur le systeme integre de Django :
 - `LoginRequiredMixin` pour proteger les pages privees.
 
 Les vues de modification et de suppression filtrent le queryset avec `user=self.request.user`. Ainsi, un utilisateur ne peut pas modifier ou supprimer une entree appartenant a un autre compte. Les formulaires utilisent aussi la protection CSRF de Django.
+
+<!-- CAPTURE: 07-statistiques.png — Page des statistiques de lecture -->
 
 ### 3.8 Suivi personnel, avis et statistiques
 
@@ -408,6 +424,8 @@ La page de statistiques utilise les donnees personnelles de l'utilisateur connec
 Ces fonctionnalites renforcent le projet sans etre separees du reste : elles prolongent naturellement le modele de bibliotheque personnelle et les parcours utilisateur.
 
 ---
+
+<!-- CAPTURE: 12-tests.png — Terminal avec résultat des tests 48/48 OK -->
 
 ## 4. Tests et validation
 
