@@ -132,3 +132,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/my-books/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Email (console pour le développement — les emails s'affichent dans le terminal)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

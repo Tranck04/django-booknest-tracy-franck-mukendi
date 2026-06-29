@@ -33,6 +33,7 @@
               <button type="submit" class="btn-link">Déconnexion</button>
             </form>
           </li>
+          <li><a href="{% url 'accounts:password_change' %}">Changer mot de passe</a></li>
           <li class="nav-user">{{ user.username }}</li>
           {% else %}
           <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
