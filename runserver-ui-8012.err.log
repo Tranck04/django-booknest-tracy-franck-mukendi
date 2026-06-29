@@ -10,3 +10,7 @@ Not Found: /favicon.ico
 [29/Jun/2026 17:28:59] "GET /catalogue/ HTTP/1.1" 200 6414
 [29/Jun/2026 17:29:11] "GET /my-books/ HTTP/1.1" 200 3505
 [29/Jun/2026 17:29:33] "GET / HTTP/1.1" 200 5826
+[29/Jun/2026 17:47:02] "GET / HTTP/1.1" 200 6362
+[29/Jun/2026 17:47:02] "GET /static/css/style.css HTTP/1.1" 304 0
+[29/Jun/2026 17:47:08] "GET /catalogue/ HTTP/1.1" 200 11304
+[29/Jun/2026 17:47:27] "GET /book/485885/ HTTP/1.1" 200 3081

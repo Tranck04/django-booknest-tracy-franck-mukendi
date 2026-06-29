@@ -184,6 +184,127 @@ img {
   cursor: pointer;
 }
 
+/* --- Nav user section & dropdown --- */
+.nav-user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-user-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: var(--color-surface-soft);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-line);
+  white-space: nowrap;
+}
+
+.nav-auth {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-main {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.dropdown-toggle:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  min-width: 210px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  list-style: none;
+  padding: 6px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+  z-index: 100;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown-menu:focus-within {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu li {
+  margin: 0;
+}
+
+.dropdown-menu a,
+.dropdown-menu .dropdown-logout button {
+  display: block;
+  width: 100%;
+  padding: 9px 18px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 550;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu .dropdown-logout button:hover {
+  background: #eef4f4;
+  color: var(--color-primary-dark);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--color-line);
+  margin: 6px 11px;
+}
+
 /* Layout */
 .main-content {
   flex: 1;

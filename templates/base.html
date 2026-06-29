@@ -1,62 +1,81 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BookNest{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
-  </head>
-  <body>
+</head>
+<body>
     <nav class="navbar" aria-label="Navigation principale">
-      <div class="container nav-container">
-        <a href="{% url 'home' %}" class="nav-brand">BookNest</a>
-        <ul class="nav-links">
-          <li><a href="{% url 'home' %}">Accueil</a></li>
-          <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
-          <li><a href="{% url 'category-list' %}">Catégories</a></li>
-          <li><a href="{% url 'about' %}">À propos</a></li>
+        <div class="container nav-container">
+            <a href="{% url 'home' %}" class="nav-brand">BookNest</a>
 
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'my-books' %}" class="nav-highlight">Ma bibliothèque</a></li>
-          <li><a href="{% url 'my-favorites' %}">Favoris</a></li>
-          <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
-          <li><a href="{% url 'reading-stats' %}">Statistiques</a></li>
-          <li><a href="{% url 'accounts:password_change' %}">Mot de passe</a></li>
-          <li>
-            <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
-              {% csrf_token %}
-              <button type="submit" class="btn-link">Déconnexion</button>
-            </form>
-          </li>
-          <li class="nav-user">{{ user.username }}</li>
-          {% else %}
-          <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
-          <li><a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a></li>
-          {% endif %}
-        </ul>
-      </div>
+            <!-- Navigation publique -->
+            <ul class="nav-links nav-main">
+                <li><a href="{% url 'home' %}">Accueil</a></li>
+                <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+                <li><a href="{% url 'category-list' %}">Catégories</a></li>
+                <li><a href="{% url 'about' %}">À propos</a></li>
+            </ul>
+
+            <!-- Navigation utilisateur -->
+            <div class="nav-user-section">
+                {% if user.is_authenticated %}
+                    <!-- Dropdown Mon Espace -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle nav-highlight" aria-haspopup="true" aria-expanded="false">
+                            Mon Espace ▾
+                        </button>
+                        <ul class="dropdown-menu" aria-label="Menu utilisateur">
+                            <li><a href="{% url 'my-books' %}">Ma Bibliothèque</a></li>
+                            <li><a href="{% url 'my-favorites' %}">Favoris</a></li>
+                            <li><a href="{% url 'my-read-later' %}">À lire plus tard</a></li>
+                            <li><a href="{% url 'reading-stats' %}">Statistiques</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><a href="{% url 'accounts:password_change' %}">Changer mot de passe</a></li>
+                            <li>
+                                <form method="post" action="{% url 'accounts:logout' %}" class="logout-form dropdown-logout">
+                                    {% csrf_token %}
+                                    <button type="submit">Déconnexion</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <span class="nav-user-tag">{{ user.username }}</span>
+                {% else %}
+                    <ul class="nav-links nav-auth">
+                        <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
+                        <li><a href="{% url 'accounts:signup' %}" class="nav-highlight">Inscription</a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
     </nav>
 
     {% if messages %}
-    <div class="messages container">
-      {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    </div>
+        <div class="messages container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <main class="container main-content">
-      {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
 
     <footer class="footer">
-      <div class="container">
-        <p>&copy; 2025 BookNest - Bibliothèque personnelle en ligne</p>
-      </div>
+        <div class="container">
+            <p>&copy; 2025 BookNest — Bibliothèque personnelle en ligne | Projet Django</p>
+        </div>
     </footer>
 
     {% block extra_scripts %}{% endblock %}
-  </body>
+</body>
 </html>

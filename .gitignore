@@ -15,6 +15,7 @@ package-lock.json
 
 # Media uploads
 media/book_covers/*
+books.csv
 
 # IDE
 .vscode/
