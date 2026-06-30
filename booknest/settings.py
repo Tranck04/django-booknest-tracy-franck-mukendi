@@ -1,5 +1,6 @@
 """Django settings for booknest project — compatible Railway & local dev."""
 import os
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,10 +16,13 @@ if env_file.exists():
 # ---- Sécurité ----
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-only-change-me')
 DEBUG = env.bool('DEBUG', default=False)
+TESTING = 'test' in sys.argv
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '.railway.app'])
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['https://*.railway.app'])
 
 # ---- Applications ----
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,8 +32,6 @@ INSTALLED_APPS = [
     # Apps locales
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
-    # Production
-    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +92,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_BACKEND = (
+    'django.contrib.staticfiles.storage.StaticFilesStorage'
+    if DEBUG or TESTING
+    else 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
+WHITENOISE_MANIFEST_STRICT = env.bool('WHITENOISE_MANIFEST_STRICT', default=False)
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': STATICFILES_BACKEND,
+    },
+}
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -108,9 +124,10 @@ EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.
 
 # ---- Sécurité production (désactivée en dev) ----
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False)
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

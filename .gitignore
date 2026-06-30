@@ -5,7 +5,8 @@ __pycache__/
 *.pyc
 *.pyo
 db.sqlite3
-staticfiles/
+staticfiles/*
+!staticfiles/.gitkeep
 
 # Node
 node_modules/
