@@ -5,6 +5,7 @@ __pycache__/
 *.pyc
 *.pyo
 db.sqlite3
+staticfiles/
 
 # Node
 node_modules/
@@ -16,6 +17,9 @@ package-lock.json
 # Media uploads
 media/book_covers/*
 books.csv
+
+# Environnement local
+.env
 
 # IDE
 .vscode/
