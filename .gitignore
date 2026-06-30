@@ -19,6 +19,7 @@ package-lock.json
 media/book_covers/*
 books.csv
 
+
 # Environnement local
 .env
 

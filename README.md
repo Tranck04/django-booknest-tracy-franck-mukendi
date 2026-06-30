@@ -1,135 +1,182 @@
-# 📚 BookNest — Bibliothèque personnelle en ligne
+# BookNest — Bibliotheque personnelle en ligne
 
-Projet Django n°2 — Année universitaire 2025-2026
+Projet Django n°2 — Annee universitaire 2025-2026
 
 ---
 
-## 📖 Présentation
+## Presentation
 
-BookNest est une plateforme web de gestion de bibliothèque personnelle. Elle permet aux utilisateurs de :
+BookNest est une plateforme web de gestion de bibliotheque personnelle. Elle permet aux utilisateurs de :
 
-- 📖 **Consulter un catalogue commun** de livres enrichi par la communauté
-- 📚 **Gérer leur bibliothèque personnelle** (ajout, modification, suppression)
-- 🔍 **Éviter les doublons** : si un livre existe déjà dans le catalogue, il est simplement lié à l'utilisateur sans être dupliqué
-- 📊 **Suivre leur lecture** (à lire, en cours, terminé)
-- ⭐ **Marquer des favoris** et créer une liste « à lire plus tard »
-- 📝 **Rédiger des notes et avis** sur les livres
-- 📈 **Consulter des statistiques** de lecture personnalisées
+- Consulter un **catalogue commun** de **271 000+ livres** enrichi collaborativement
+- Gerer leur **bibliotheque personnelle** (ajout, modification, suppression)
+- Eviter les doublons : si un livre existe deja dans le catalogue, il est simplement lie a l'utilisateur sans etre duplique
+- Suivre leur lecture (a lire, en cours, termine)
+- Marquer des **favoris** et creer une liste « a lire plus tard »
+- Rediger des **notes et avis** sur les livres
+- Consulter des **statistiques** de lecture personnalisees
 
-## 🛠️ Technologies
+## Technologies
 
 - **Python 3.14** — Langage de programmation
 - **Django 6.0** — Framework web
-- **SQLite** — Base de données
+- **PostgreSQL** (Railway) ou **SQLite** (local) — Base de donnees
 - **HTML5 & CSS3** — Interface utilisateur responsive
 - **Pillow** — Gestion des images de couverture
+- **Gunicorn + Whitenoise** — Serveur de production
 
-## 📁 Structure du projet
+## Installation locale
 
-```
-BookNest/
-├── booknest/               # Configuration du projet Django
-│   ├── settings.py         # Paramètres (FR, MEDIA, STATIC, LOGIN)
-│   ├── urls.py             # Routes principales
-│   └── ...
-├── books/                  # Application principale
-│   ├── models.py           # Modèles : Category, Book, UserBook
-│   ├── views.py            # Vues (publiques + bibliothèque + stats)
-│   ├── urls.py             # URLs de l'application
-│   ├── admin.py            # Configuration Django Admin
-│   └── tests.py            # Tests automatisés
-├── accounts/               # Application d'authentification
-│   ├── views.py            # Vue d'inscription
-│   ├── urls.py             # URLs auth (login, logout, signup)
-│   └── ...
-├── templates/              # Templates HTML
-│   ├── base.html           # Template de base avec navbar
-│   ├── books/              # Templates de l'app books
-│   └── accounts/           # Templates d'authentification
-├── static/                 # Fichiers statiques
-│   └── css/style.css       # Feuille de style
-├── media/                  # Fichiers média (couvertures de livres)
-├── manage.py               # Script de gestion Django
-├── requirements.txt        # Dépendances Python
-└── README.md               # Documentation
-```
+### Pre-requis
 
-## 🚀 Installation
+- Python 3.x installe
+- Git installe
 
-### Prérequis
-
-- Python 3.x installé
-- Git installé
-
-### Étapes
+### Etapes
 
 ```bash
-# 1. Cloner le dépôt
+# 1. Cloner le depot
 git clone https://github.com/Tranck04/django-booknest-tracy-franck-mukendi.git
 cd django-booknest-tracy-franck-mukendi
 
-# 2. Créer et activer l'environnement virtuel
+# 2. Creer et activer l'environnement virtuel
 python -m venv .venv
 .venv\Scripts\activate      # Windows
 
-# 3. Installer les dépendances
+# 3. Installer les dependances
 pip install -r requirements.txt
 
 # 4. Appliquer les migrations
 python manage.py migrate
 
-# 5. Créer un superutilisateur
+# 5. Creer un superutilisateur
 python manage.py createsuperuser
 
-# 6. Lancer le serveur de développement
+# 6. (Optionnel) Importer les 271 000 livres
+python manage.py import_books
+
+# 7. Lancer le serveur de developpement
 python manage.py runserver
 ```
 
-L'application est accessible à l'adresse : **http://127.0.0.1:8000/**
+L'application est accessible a l'adresse : **http://127.0.0.1:8000/**
 
-## 🔑 Accès administrateur
+## Deploiement sur Railway
 
-- **URL** : http://127.0.0.1:8000/admin/
-- Utilisez les identifiants du superutilisateur créé à l'étape 5
+### Pre-requis
 
-## 🧪 Tests
+- Un compte [Railway](https://railway.app/)
+- Le depot GitHub du projet
+
+### Etapes
+
+```bash
+# 1. Creer un nouveau projet Railway depuis GitHub
+#    Lier le depot : Tranck04/django-booknest-tracy-franck-mukendi
+
+# 2. Ajouter une base PostgreSQL
+#    Dashboard Railway > New > Database > PostgreSQL
+
+# 3. Configurer les variables d'environnement
+#    SECRET_KEY = <cle secrete aleatoire>
+#    DEBUG = False
+#    ALLOWED_HOSTS = .railway.app
+
+# 4. Le deploiement est automatique :
+#    - Release : migrations + collectstatic
+#    - Web     : gunicorn avec port Railway ($PORT)
+
+# 5. Creer le superutilisateur (via Railway CLI)
+#    railway run python manage.py createsuperuser
+```
+
+Le projet est automatiquement configure pour Railway via :
+- [`Procfile`](Procfile:1) : commande de demarrage et release
+- [`runtime.txt`](runtime.txt:1) : version Python
+- [`booknest/settings.py`](booknest/settings.py:1) : PostgreSQL via `DATABASE_URL`, Whitenoise, securite production
+
+## Acces administrateur
+
+- **Local** : http://127.0.0.1:8000/admin/
+- **Railway** : `https://<votre-app>.railway.app/admin/`
+- Utilisez les identifiants du superutilisateur
+
+## Tests
 
 ```bash
 python manage.py test
 ```
 
-Les tests couvrent :
+48 tests couvrant :
+- Les modeles (Category, Book, UserBook)
+- Les pages publiques (accueil, catalogue, detail, categories)
+- L'authentification (inscription, connexion, deconnexion)
+- La bibliotheque personnelle (CRUD UserBook, anti-doublon)
+- Les fonctionnalites avancees (favoris, a lire plus tard, statistiques, note moyenne)
 
-- Les modèles (Category, Book, UserBook)
-- Les pages publiques (accueil, catalogue, détail, catégories)
-- L'authentification (inscription, connexion, déconnexion)
-- La bibliothèque personnelle (CRUD UserBook, anti-doublon)
-- Les fonctionnalités avancées (favoris, à lire plus tard, statistiques, note moyenne)
+## Pages de l'application
 
-## 🌐 Pages de l'application
+| URL | Page | Acces |
+|-----|------|-------|
+| `/` | Accueil | Public |
+| `/about/` | A propos | Public |
+| `/catalogue/` | Catalogue commun | Public |
+| `/book/<id>/` | Fiche detaillee d'un livre | Public |
+| `/categories/` | Liste des categories | Public |
+| `/accounts/signup/` | Inscription | Public |
+| `/accounts/login/` | Connexion | Public |
+| `/accounts/logout/` | Deconnexion | Connecte |
+| `/accounts/password-change/` | Changer mot de passe | Connecte |
+| `/accounts/password-reset/` | Reinitialiser mot de passe | Public |
+| `/my-books/` | Ma Bibliotheque | Connecte |
+| `/my-books/add/<pk>/` | Ajout direct depuis le catalogue | Connecte |
+| `/my-books/add/` | Ajouter un livre (formulaire) | Connecte |
+| `/my-books/<id>/edit/` | Modifier statut/notes | Connecte |
+| `/my-books/<id>/delete/` | Retirer de la bibliotheque | Connecte |
+| `/my-books/favorites/` | Mes Favoris | Connecte |
+| `/my-books/read-later/` | A lire plus tard | Connecte |
+| `/my-books/stats/` | Statistiques de lecture | Connecte |
 
-| URL                      | Page                       | Accès    |
-| ------------------------ | -------------------------- | -------- |
-| `/`                      | Accueil                    | Public   |
-| `/about/`                | À propos                   | Public   |
-| `/catalogue/`            | Catalogue commun           | Public   |
-| `/book/<id>/`            | Fiche détaillée d'un livre | Public   |
-| `/categories/`           | Liste des catégories       | Public   |
-| `/accounts/signup/`      | Inscription                | Public   |
-| `/accounts/login/`       | Connexion                  | Public   |
-| `/accounts/logout/`      | Déconnexion                | Connecté |
-| `/my-books/`             | Ma Bibliothèque            | Connecté |
-| `/my-books/add/`         | Ajouter un livre           | Connecté |
-| `/my-books/<id>/edit/`   | Modifier statut/notes      | Connecté |
-| `/my-books/<id>/delete/` | Retirer de la bibliothèque | Connecté |
-| `/my-books/favorites/`   | Mes Favoris                | Connecté |
-| `/my-books/read-later/`  | À lire plus tard           | Connecté |
-| `/my-books/stats/`       | Statistiques de lecture    | Connecté |
+## Structure du projet
 
-## 👥 Auteurs
+```
+BookNest/
+├── booknest/              # Configuration du projet Django
+│   ├── settings.py        # Parametres (FR, MEDIA, STATIC, login, Railway)
+│   ├── urls.py            # Routes principales
+│   └── wsgi.py            # WSGI pour production
+├── books/                 # Application principale
+│   ├── models.py          # Modeles : Category, Book, UserBook
+│   ├── views.py           # Vues (publiques + bibliotheque + stats)
+│   ├── urls.py            # URLs de l'application
+│   ├── admin.py           # Configuration Django Admin
+│   ├── tests.py           # Tests automatises (48 tests)
+│   └── management/
+│       └── commands/
+│           └── import_books.py  # Import CSV (271K livres)
+├── accounts/              # Application d'authentification
+│   ├── views.py           # Vue d'inscription
+│   └── urls.py            # URLs auth (signup, login, logout, password)
+├── templates/             # Templates HTML
+│   ├── base.html          # Template de base avec navbar dropdown
+│   ├── books/             # 10 templates de l'app books
+│   └── accounts/          # 9 templates d'authentification
+├── static/                # Fichiers statiques
+│   └── css/style.css      # Feuille de style responsive
+├── media/                 # Fichiers media (couvertures upload)
+├── staticfiles/           # Fichiers statiques collectes (production)
+├── manage.py              # Script de gestion Django
+├── requirements.txt       # Dependances Python
+├── Procfile               # Configuration Railway
+├── runtime.txt            # Version Python (Railway)
+├── .env.example           # Exemple de configuration locale
+└── README.md              # Documentation
+```
 
-Projet réalisé par **Tracy Franck Mukendi** dans le cadre du cours Django.
+## Auteurs
 
-## 📄 Licence
+Projet realise par **Tracy Franck Mukendi** dans le cadre du cours Django.
 
-Projet académique — Année universitaire 2025-2026.
+## Licence
+
+Projet academique — Annee universitaire 2025-2026.
