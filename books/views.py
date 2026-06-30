@@ -1,5 +1,5 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -202,6 +202,25 @@ class UserBookUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         messages.success(self.request, "Vos informations ont été mises à jour.")
         return reverse_lazy('my-books')
+
+
+class AddToLibraryView(LoginRequiredMixin, View):
+    """Ajoute directement un livre du catalogue à la bibliothèque de l'utilisateur."""
+
+    def post(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, pk=kwargs['pk'])
+
+        if UserBook.objects.filter(user=request.user, book=book).exists():
+            messages.warning(request, f"« {book.title} » est déjà dans votre bibliothèque.")
+        else:
+            UserBook.objects.create(
+                user=request.user,
+                book=book,
+                reading_status='to_read',
+            )
+            messages.success(request, f"« {book.title} » ajouté à votre bibliothèque.")
+
+        return redirect('book-detail', pk=book.pk)
 
 
 class UserBookDeleteView(LoginRequiredMixin, DeleteView):

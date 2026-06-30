@@ -48,7 +48,10 @@
           <span class="badge badge-finished">Dans ma bibliothèque</span>
           <a href="{% url 'userbook-update' user_book.pk %}" class="btn btn-outline">Modifier ma fiche</a>
           {% else %}
-          <a href="{% url 'userbook-create' %}" class="btn btn-primary">Ajouter à ma bibliothèque</a>
+          <form method="post" action="{% url 'add-to-library' book.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Ajouter à ma bibliothèque</button>
+          </form>
           {% endif %}
         {% else %}
         <a href="{% url 'accounts:login' %}" class="btn btn-primary">Se connecter pour ajouter ce livre</a>

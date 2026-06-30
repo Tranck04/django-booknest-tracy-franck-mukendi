@@ -12,6 +12,7 @@ urlpatterns = [
     # Bibliothèque personnelle (Phase 7)
     path('my-books/', views.UserBookListView.as_view(), name='my-books'),
     path('my-books/add/', views.UserBookCreateView.as_view(), name='userbook-create'),
+    path('my-books/add/<int:pk>/', views.AddToLibraryView.as_view(), name='add-to-library'),
     path('my-books/<int:pk>/edit/', views.UserBookUpdateView.as_view(), name='userbook-update'),
     path('my-books/<int:pk>/delete/', views.UserBookDeleteView.as_view(), name='userbook-delete'),
 
