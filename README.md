@@ -95,10 +95,12 @@ Le projet est automatiquement configure pour Railway via :
 - [`runtime.txt`](runtime.txt:1) : version Python
 - [`booknest/settings.py`](booknest/settings.py:1) : PostgreSQL via `DATABASE_URL`, Whitenoise, securite production
 
+https://web-production-71811.up.railway.app
+
 ## Acces administrateur
 
 - **Local** : http://127.0.0.1:8000/admin/
-- **Railway** : `https://<votre-app>.railway.app/admin/`
+- **Railway** : `https://web-production-71811.up.railway.app/admin`
 - Utilisez les identifiants du superutilisateur
 
 ## Tests
